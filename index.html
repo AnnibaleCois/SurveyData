@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Survey data and weighted regression</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Department of Global Health, Stellenbosch University &amp;   School of Public Health, University of Cape Town  Contacts: acois@sun.ac.za ORCID: 0000-0002-7014-6510 Web of Science: AAK-8603-2020" />
+    <meta name="date" content="2023-05-11" />
+    <script src="index_files/header-attrs-2.16/header-attrs.js"></script>
+    <link href="index_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="index_files/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="index_files/tile-view-0.2.6/tile-view.js"></script>
+    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"d5f87bf2dcae43de8fdc50e65a002a83","expires":14}</script>
+    <script src="index_files/himalaya-1.1.0/himalaya.js"></script>
+    <script src="index_files/js-cookie-3.0.0/js.cookie.js"></script>
+    <link href="index_files/editable-0.2.6/editable.css" rel="stylesheet" />
+    <script src="index_files/editable-0.2.6/editable.js"></script>
+    <script src="index_files/fabric-4.3.1/fabric.min.js"></script>
+    <link href="index_files/xaringanExtra-scribble-0.0.1/scribble.css" rel="stylesheet" />
+    <script src="index_files/xaringanExtra-scribble-0.0.1/scribble.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', function() { window.xeScribble = new Scribble({"pen_color":["#FF0000"],"pen_size":3,"eraser_size":30,"palette":[]}) })</script>
+    <script src="index_files/xaringanExtra-webcam-0.0.1/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <link href="index_files/panelset-0.2.6/panelset.css" rel="stylesheet" />
+    <script src="index_files/panelset-0.2.6/panelset.js"></script>
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } },
+      });
+    </script>
+    <style>
+    .mjx-mrow a {
+      color: black;
+      pointer-events: none;
+      cursor: default;
+    }
+    </style>
+    <link rel="stylesheet" href="assets/sydney-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="assets/sydney.css" type="text/css" />
+    <link rel="stylesheet" href="assets/stellenbosch.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Survey data and weighted regression
+]
+.subtitle[
+## Annibale Cois
+]
+.author[
+### <span style="font-size: 80%;">Department of Global Health, Stellenbosch University &amp; <br/> School of Public Health, University of Cape Town<br/><br/>Contacts: <a href="mailto:acois@sun.ac.za" class="email">acois@sun.ac.za</a><br/>ORCID: <a href="https://orcid.org/0000-0002-7014-6510">0000-0002-7014-6510</a><br/>Web of Science: <a href="https://www.webofscience.com/wos/author/rid/AAK-8603-2020">AAK-8603-2020</a></span>
+]
+.date[
+### <span style="color: #A88B53; position: relative; top: 150px;">11 May 2023</span>
+]
+
+---
+
+class: hide_logo
+
+
+<div>
+<style type="text/css">.xaringan-extra-logo {
+width: 150px;
+height: 46px;
+z-index: 0;
+background-image: url(assets/sulogo_1.png);
+background-size: contain;
+background-repeat: no-repeat;
+position: absolute;
+bottom:1em;left:60px;
+}
+</style>
+<script>(function () {
+  let tries = 0
+  function addLogo () {
+    if (typeof slideshow === 'undefined') {
+      tries += 1
+      if (tries < 10) {
+        setTimeout(addLogo, 100)
+      }
+    } else {
+      document.querySelectorAll('.remark-slide-content:not(.title-slide):not(.inverse):not(.hide_logo)')
+        .forEach(function (slide) {
+          const logo = document.createElement('div')
+          logo.classList = 'xaringan-extra-logo'
+          logo.href = null
+          slide.appendChild(logo)
+        })
+    }
+  }
+  document.addEventListener('DOMContentLoaded', addLogo)
+})()</script>
+</div>
+
+## Outline &lt;svg viewBox="0 0 512 512" style="height:1em;display:inline-block;fill:#561a34;position:fixed;top:38;right:50;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M80 368H16a16 16 0 0 0-16 16v64a16 16 0 0 0 16 16h64a16 16 0 0 0 16-16v-64a16 16 0 0 0-16-16zm0-320H16A16 16 0 0 0 0 64v64a16 16 0 0 0 16 16h64a16 16 0 0 0 16-16V64a16 16 0 0 0-16-16zm0 160H16a16 16 0 0 0-16 16v64a16 16 0 0 0 16 16h64a16 16 0 0 0 16-16v-64a16 16 0 0 0-16-16zm416 176H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16z"&gt;&lt;/path&gt;&lt;/svg&gt;
+&lt;br/&gt;
+- ### Survey data? 
+- ### Complex sampling designs 
+- ### Non-independence and unequal sampling probability: why should we care?
+- ### (Proper) analysis of survey data: approaches 
+&lt;br/&gt;
+Examples: &lt;img src = "images/rlogo.png" height = "50"&gt;, &lt;/img&gt;&amp;nbsp;&lt;img src = "images/statalogo.png" height = "50"&gt;
+  
+???
+
+shift-c : open a cloned window
+shift-p : toggle to presenter mode
+
+
+---
+class: hide_logo
+## Survey data?  
+
+&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;
+#.center[ Data that are collected by means of any method other than .content-box-yellow[simple random sampling] from a .content-box-yellow[large population]]
+
+???
+Key words: 
+1. **Simple random sampling**: equal probability of selection of all member of the target population; 
+2. **Large (Infinite) population**: large population compared to sample size (pop/sample &gt; 10000) so sampling with replacement = sampling without replacement 
+
+---
+class: hide_logo
+
+## Sampling strategies 
+
+.center[
+![](index_files/figure-html/survey_1a-1.png)&lt;!-- --&gt;
+]
+
+???
+Simple random sampling
+ 
+---
+class: hide_logo
+
+## Sampling strategies 
+
+.center[
+![](index_files/figure-html/survey_1b-1.png)&lt;!-- --&gt;
+]
+
+---
+class: hide_logo
+
+## Sampling strategies 
+
+.center[
+![](index_files/figure-html/survey_2a-1.png)&lt;!-- --&gt;
+]
+
+???
+more efficient (in a practical sense, not statistical)
+We consider the 53 distrcits in SA
+and we select some of them, say 18
+
+---
+class: hide_logo
+
+## Sampling strategies 
+
+.center[
+![](index_files/figure-html/survey_2b-1.png)&lt;!-- --&gt;
+]
+
+???
+OK if we are interested in estimates for the whole country only.
+But not if we want lower levele stimates (e.g. at provincial level)
+
+---
+class: hide_logo
+
+## Sampling strategies 
+ 
+.center[
+![](index_files/figure-html/survey_2c-1.png)&lt;!-- --&gt;
+]
+---
+class: hide_logo
+ 
+## Sampling strategies 
+.center[
+![](index_files/figure-html/survey_2d-1.png)&lt;!-- --&gt;
+]
+
+???
+Stratified sampling: we repeat the process separately for each stratum (== province))
+E.g. 2 district per province, and 6 individuals per district
+
+---
+class: hide_logo
+ 
+## Sampling strategies 
+
+.center[
+![](index_files/figure-html/survey_3a-1.png)&lt;!-- --&gt;
+]
+
+???
+Better, but....
+
+---
+class: hide_logo
+ 
+## Sampling strategies 
+
+.center[
+![](index_files/figure-html/survey_3b-1.png)&lt;!-- --&gt;
+]
+
+???
+small provinces and large provinces have the same number of individuals....
+
+---
+class: hide_logo
+ 
+## Sampling strategies 
+
+.center[
+![](index_files/figure-html/survey_3c-1.png)&lt;!-- --&gt;
+]
+
+???
+Disproportionate sampling 
+Comment on self-weightinhg
+
+---
+class: hide_logo
+ 
+## Sampling strategies 
+  
+.center[
+![](index_files/figure-html/survey_3d-1.png)&lt;!-- --&gt;
+]
+
+---
+class: hide_logo
+background-image: url("images/enumeration.png")
+background-position: 50% 50%
+background-size: 50%
+
+## In reality... 
+
+???
+Statistics South Africa enumeration areas (Free State)
+
+---
+class: hide_logo, middle, center
+
+
+.pull-left[
+# .content-box-yellow[Unequal sampling] 
+
+]
+
+.pull-right[
+# .content-box-red[Clustering]  
+]
+
+.pull-left[
+# .content-box-yellow[Stratification]  
+]
+
+.pull-right[
+# .content-box-green[Finite population] 
+]
+
+???
+Characteristics that differentiate complex sampling strategies used in surveys from simple random sampling.
+
+---
+class: hide_logo, center, middle 
+# .content-box-red[Why should we care?] 
+
+---
+class: hide_logo, middle
+
+.pull-left[
+.center[
+# .content-box-yellow[BIASED ESTIMATES] 
+]
+]
+.pull-right[
+.center[
+# .content-box-green[INCORRECT QUANTIFICATION OF SAMPLING ERROR]
+]
+]
+ 
+???
+Ignoring the sampling strategy in the (i.e. assuming that it was simple random sampling) introduces bias in the estimates and incorrect quantification of sampling error
+
+---
+class: hide_logo, middle, center
+
+# .content-box-yellow[Unequal sampling, stratification] 
+
+---
+class: hide_logo
+# An example Dataset
+
+
+```r
+summary(DATA[, c(1:3,5,7)])
+```
+
+```
+ globorisk_nonlab       geo1           geo2          sex            age       
+ Min.   : 0.4883   KZN    : 548   CPT    : 243   Female:2531   Min.   :40.00  
+ 1st Qu.: 4.6260   EC     : 538   DC37   : 212   Male  :1508   1st Qu.:46.00  
+ Median : 9.9352   NW     : 531   ETH    : 190                 Median :53.00  
+ Mean   :13.8539   LI     : 524   CBDC3  : 178                 Mean   :54.14  
+ 3rd Qu.:19.3503   MP     : 428   DC17   : 173                 3rd Qu.:62.00  
+ Max.   :87.5525   FS     : 421   DC15   : 138                 Max.   :74.00  
+                   (Other):1049   (Other):2905                                
+```
+
+
+???
+South African population 40-74 years
+Estimated 10 years cardiovascular risk
+Example dataset, modified for teaching purposes...
+
+---
+class: hide_logo
+
+
+```r
+mean(DATA$globorisk_nonlab) 
+```
+
+```
+[1] 13.85389
+```
+
+```r
+aggregate(DATA$globorisk_nonlab, by = list(DATA$geo1), FUN = mean)
+```
+
+```
+  Group.1        x
+1      EC 14.74044
+2      FS 13.60239
+3      GT 12.64429
+4     KZN 14.16086
+5      LI 12.99496
+6      MP 12.87967
+7      NC 15.30294
+8      NW 13.49184
+9      WC 15.27239
+```
+
+
+???
+Estimating average cardiovascular risk
+
+---
+class: hide_logo
+
+
+```r
+cbind(data.frame(table(DATA$geo1)), POP2016)
+```
+
+```
+  Var1 Freq geo1      pop
+1   EC  538   EC  7061700
+2   FS  421   FS  2861600
+3   GT  372   GT 13498200
+4  KZN  548  KZN 11079700
+5   LI  524   LI  5803900
+6   MP  428   MP  4328300
+7   NC  315   NC  1191700
+8   NW  531   NW  3790600
+9   WC  362   WC  6293200
+```
+ 
+---
+class: hide_logo
+.small[
+
+```r
+psamp &lt;- table(DATA$geo1)/POP2016$pop  
+psamp
+```
+
+```
+
+          EC           FS           GT          KZN           LI           MP 
+7.618562e-05 1.471205e-04 2.755923e-05 4.945982e-05 9.028412e-05 9.888409e-05 
+          NC           NW           WC 
+2.643283e-04 1.400834e-04 5.752241e-05 
+```
+
+```r
+sweight &lt;- 1/psamp 
+sweight
+```
+
+```
+
+       EC        FS        GT       KZN        LI        MP        NC        NW 
+13125.836  6797.150 36285.484 20218.431 11076.145 10112.850  3783.175  7138.606 
+       WC 
+17384.530 
+```
+
+```r
+sweight &lt;- sweight/sum(sweight)
+sweight 
+```
+
+```
+
+        EC         FS         GT        KZN         LI         MP         NC 
+0.10423766 0.05397896 0.28815794 0.16056287 0.08796022 0.08031030 0.03004374 
+        NW         WC 
+0.05669061 0.13805770 
+```
+ ]
+---
+class: hide_logo
+
+
+```r
+aest &lt;- aggregate(DATA$globorisk_nonlab, by = list(DATA$geo1), FUN = mean)$x # BREAK
+west &lt;- aest %*% sweight 
+west
+```
+
+```
+         [,1]
+[1,] 13.69851
+```
+
+```r
+mean(DATA$globorisk_nonlab) 
+```
+
+```
+[1] 13.85389
+```
+ 
+???
+bias!
+
+---
+class: hide_logo, center, middle 
+# .content-box-red[What about regression models?] 
+---
+class: hide_logo
+
+
+```r
+glm(globorisk_nonlab ~ age, family = gaussian(link = "identity"), data = DATA)
+```
+
+```
+
+Call:  glm(formula = globorisk_nonlab ~ age, family = gaussian(link = "identity"), 
+    data = DATA)
+
+Coefficients:
+(Intercept)          age  
+   -38.3147       0.9637  
+
+Degrees of Freedom: 4038 Total (i.e. Null);  4037 Residual
+Null Deviance:	    628900 
+Residual Deviance: 289500 	AIC: 28720
+```
+  
+???
+Similar effects happens when the estimates of interest are not simple descriptive statistics but, for example, regression coefficients: 
+
+  
+---
+class: hide_logo
+  
+
+```r
+WEIGHTS &lt;- data.frame(sweight)
+colnames(WEIGHTS) &lt;- c("geo1","sweight")
+DATA &lt;- merge(DATA, WEIGHTS)
+
+glm(globorisk_nonlab ~ age, family = gaussian(link = "identity"), 
+    weights = DATA$sweight, data = DATA)
+```
+
+```
+
+Call:  glm(formula = globorisk_nonlab ~ age, family = gaussian(link = "identity"), 
+    data = DATA, weights = DATA$sweight)
+
+Coefficients:
+(Intercept)          age  
+   -38.5609       0.9702  
+
+Degrees of Freedom: 4038 Total (i.e. Null);  4037 Residual
+Null Deviance:	    68900 
+Residual Deviance: 31090 	AIC: 29320
+```
+
+
+---
+class: hide_logo, middle, center
+
+`$$y = (y_1, y_2, y_3, \cdots y_n) \;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\; L(y,\theta) = f(y_1,\theta)f(y_2,\theta)\cdots f(y_n,\theta) = \prod_{i=1}^{n}f(y_i,\theta)$$`
+
+`$$\underset{\theta}{\operatorname{argmax}} \prod_{i=1}^{n}f(y_i,\theta) =  \underset{\theta}{\operatorname{argmax}} \sum_{i=1}^{n} log(f(y_i,\theta))$$`
+
+`$$\underset{\theta}{\operatorname{argmax}} \sum_{i=1}^{n} \color{red}{\mathbf{w_i}}log(f(y_i,\theta))$$`
+???
+pseudo-likelihood
+
+
+---
+class: hide_logo, center, middle
+
+# .content-box-red[Clustering] 
+
+???
+What about clustering
+negative effect on variance
+
+---
+class: hide_logo
+background-image: url("images/sampling1.png")
+background-position: 50% 50%
+background-size: 80%
+
+???
+simple random sample
+increasing sample size we increase the 'information' we have on teh population
+
+---
+class: hide_logo
+background-image: url("images/sampling2.png")
+background-position: 50% 50%
+background-size: 80%
+
+???
+simple random sample
+increasing sample size we don't increase the 'information' we have on the population (new element very similar to teh previous do not add any information...in this extreme case they are useless...)
+
+---
+class: hide_logo
+&lt;br/&gt;
+### .content-box-red[Clustering:]  
+&lt;br/&gt;
+Dividing the population into groups and sampling from a random subset of these groups will **decrease precision for a given sample size**  
+&lt;br/&gt;
+The reduction in precision increases as the units within each cluster become **more similar to each other**.   
+&lt;br/&gt;
+A measure of the level of "similarity" of the units in each cluster (compared to units in different clusters) is given by the **intraclass correlation coefficient**:
+
+$$ ICC = \frac{\sigma_c^2}{\sigma_c^2 + \sigma_e^2} $$
+???
+proportion of total variance explained by variation between clusters ($$\sigma_c$$). `$$\sigma_e^2$$` is the variance within groups. 
+You know about random intercept model: it is the decomposition of the total variance across levels
+
+`$$Y_{ij} = \mu + \alpha_j + \epsilon_{ij}$$`
+---
+class: hide_logo
+&lt;br/&gt;
+
+A measure of the effect of ICC on the precision of the estimates is given by the **design effect**, which is (an estimate of) the increase of the standar error of the estimates when using cluster sampling rather than simple random sampling:  
+  
+`$$DEFF = \sqrt{\frac{\sigma_{CS}^2}{\sigma_{SRS}^2}}$$`
+
+&lt;br/&gt;
+The **effective sample size** in survey data is (an estimate of) the sample that we would have needed in the hypothesiss of simple random sampling: 
+
+$$ n_{eff} = \frac{n}{DEFF}$$
+
+???
+
+---
+class: hide_logo
+# An example
+
+
+
+
+.pull-left[
+.center[#### .content-box-yellow[ICC = 0.01, DEFF = 1.62, NEFF = 339]]
+&lt;img src="index_files/figure-html/survey_6a-1.png" width="400px" /&gt;
+]
+
+.pull-right[
+.center[#### .content-box-green[ICC = 0.65, DEFF = 31.98, NEFF = 17]]
+&lt;img src="index_files/figure-html/survey_6b-1.png" width="400px" /&gt;
+]
+
+???
+
+ACTUAL SAMPLE SIZE = 548
+
+---
+class: hide_logo, center, middle
+
+# .content-box-red[Analysing clustered data] 
+
+???
+
+---
+class: hide_logo
+background-image: url("images/dep1.png")
+background-position: 50% 40%
+background-size: 80%
+ 
+---
+class: hide_logo
+background-image: url("images/dep2.png")
+background-position: 50% 40%
+background-size: 80%
+
+---
+class: hide_logo
+background-image: url("images/dep3.png")
+background-position: 50% 40%
+background-size: 80%
+
+.footnote[.scriptsize[&lt;cite&gt;Lumley (2004); Muff, Held, and Keller (2016); MacKinnon, Nielsen, and Webb (2023)&lt;/cite&gt;]]
+
+---
+class: hide_logo
+
+# Conditional Models
+
+&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;
+$$
+\operatorname{globorisk} = \alpha + \epsilon
+$$
+
+$$
+\operatorname{globorisk} = \alpha + \beta_{1}(\operatorname{age}) + \epsilon
+$$
+
+$$
+`\begin{aligned}
+  \operatorname{globorisk}_{i}  &amp;\sim N \left(\alpha_{j[i]}, \sigma^2 \right) \\
+    \alpha_{j}  &amp;\sim N \left(\mu_{\alpha_{j}}, \sigma^2_{\alpha_{j}} \right)
+    \text{, for geo1 j = 1,} \dots \text{,J}
+\end{aligned}`
+$$
+
+$$
+`\begin{aligned}
+  \operatorname{globorisk}_{i}  &amp;\sim N \left(\alpha_{j[i]} + \beta_{1}(\operatorname{age}), \sigma^2 \right) \\
+    \alpha_{j}  &amp;\sim N \left(\mu_{\alpha_{j}}, \sigma^2_{\alpha_{j}} \right)
+    \text{, for geo1 j = 1,} \dots \text{,J}
+\end{aligned}`
+$$
+
+---
+class: hide_logo
+
+.small[
+.pull-left[
+
+```r
+nm &lt;- lm(globorisk_nonlab ~ 1, 
+            data = DATA)
+summary(nm)$coefficients
+```
+
+```
+            Estimate Std. Error  t value Pr(&gt;|t|)
+(Intercept) 13.85389  0.1963625 70.55261        0
+```
+]
+
+.pull-right[
+
+```r
+library(lme4)
+cm &lt;- lmer(globorisk_nonlab ~ (1 | geo1), 
+             data = DATA)
+summary(cm)
+```
+
+```
+Linear mixed model fit by REML ['lmerMod']
+Formula: globorisk_nonlab ~ (1 | geo1)
+   Data: DATA
+
+REML criterion at convergence: 31847.2
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-1.1199 -0.7397 -0.3152  0.4408  5.9339 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ geo1     (Intercept)   0.5982  0.7734 
+ Residual             155.2405 12.4596 
+Number of obs: 4039, groups:  geo1, 9
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept)  13.8777     0.3252   42.67
+```
+]
+]
+
+---
+class: hide_logo
+
+.small[
+.pull-left[
+
+```r
+nm &lt;- lm(globorisk_nonlab ~ age + 1 , 
+            data = DATA)
+summary(nm)$coefficients
+```
+
+```
+               Estimate Std. Error   t value Pr(&gt;|t|)
+(Intercept) -38.3147216 0.76990386 -49.76559        0
+age           0.9636685 0.01400722  68.79799        0
+```
+]
+
+.pull-right[
+
+```r
+library(lme4)
+cm &lt;- lmer(
+       globorisk_nonlab ~ age + (1 | geo1), 
+       data = DATA)
+summary(cm)
+```
+
+```
+Linear mixed model fit by REML ['lmerMod']
+Formula: globorisk_nonlab ~ age + (1 | geo1)
+   Data: DATA
+
+REML criterion at convergence: 28703.8
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.1019 -0.5977 -0.1072  0.3376  8.0264 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ geo1     (Intercept)  0.7427  0.8618  
+ Residual             71.0695  8.4303  
+Number of obs: 4039, groups:  geo1, 9
+
+Fixed effects:
+             Estimate Std. Error t value
+(Intercept) -38.38573    0.82037  -46.79
+age           0.96661    0.01399   69.09
+
+Correlation of Fixed Effects:
+    (Intr)
+age -0.922
+```
+]
+]
+
+---
+class: hide_logo
+
+# Marginal Models
+&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;
+$$
+`\begin{aligned}
+\mu_i = \beta_{0} + \beta_{1}(\operatorname{age_i}) \\
+\sum_{i=1}^{N}{\frac{\partial \mu_i}{\partial \beta}V_i^{-1}\{Y_i-\mu_i(\beta)\}}
+\end{aligned}`
+$$
+---
+class: hide_logo
+
+.small[
+.pull-left[
+
+```r
+nm &lt;- lm(globorisk_nonlab ~ age + 1 , 
+            data = DATA)
+summary(nm)$coefficients
+```
+
+```
+               Estimate Std. Error   t value Pr(&gt;|t|)
+(Intercept) -38.3147216 0.76990386 -49.76559        0
+age           0.9636685 0.01400722  68.79799        0
+```
+]
+
+.pull-right[
+
+```r
+library(gee)
+mm &lt;- gee(globorisk_nonlab ~ age + 1 , 
+          id = geo1, 
+          data = DATA,  
+          corstr = "exchangeable")
+```
+
+```
+(Intercept)         age 
+-38.3147216   0.9636685 
+```
+
+```r
+t(summary(mm)$coefficients)
+```
+
+```
+            (Intercept)         age
+Estimate    -38.3836380  0.96650532
+Naive S.E.    0.8115373  0.01399094
+Naive z     -47.2974423 69.08080506
+Robust S.E.   0.6641536  0.01358678
+Robust z    -57.7933136 71.13572460
+```
+]
+] 
+
+---
+class: hide_logo
+background-image: url("images/sandwich.png")
+background-position: 50% 60%
+background-size: 40%
+
+# 'Robust' estimators
+
+--
+
+&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;
+.center[&lt;img src = "images/sandwichform.png"&gt;&lt;/img&gt;]
+
+
+.footnote[
+[The robust sandwich variance estimator for linear regression (theory)](https://thestatsgeek.com/2013/10/12/the-robust-sandwich-variance-estimator-for-linear-regression/)  
+&lt;cite&gt;Freedman (2006); MacKinnon, Nielsen, and Webb (2023)&lt;/cite&gt;]
+
+???
+
+where:
+`$$A(\beta)$$` 
+minus the derivative of the estimating function with respect to the parameter **beta** 
+
+`$$B(\beta)$$`
+variance-covariance matrix of the estimating function, 
+
+`$$\beta^{*}$$` denotes the true value of **beta**
+
+
+---
+class: hide_logo
+### .center[.content-box-green[Robust estimation: software]]
+
+.pull-left[
+.center[
+
+&lt;img src = "images/survey.png" width = "150"&gt;&lt;/img&gt;
+### [Package "Survey"](https://cran.r-project.org/web/packages/survey/index.html) 
+]
+### [Book:&amp;nbsp;&amp;nbsp; &lt;img src = "images/lumley_book.jpg" width =  "150"&gt;&lt;/img&gt;](https://r-survey.r-forge.r-project.org/svybook/) &amp;nbsp;&amp;nbsp; &amp;nbsp;&amp;nbsp;&amp;nbsp;[Video: &lt;img src = "images/video.png" width = "50"&gt;&lt;/img&gt;](https://www.youtube.com/watch?v=y8pXe7nGNhA)  
+]
+.pull-right[
+.center[
+&lt;img src = "images/stata.png"  width = "150"&gt;&lt;/img&gt;
+### ["SVY" prefix](https://www.stata.com/manuals/svysurvey.pdf) 
+]
+### [SVY:&amp;nbsp;&amp;nbsp; &lt;img src = "images/stata_manual.png" width =  "150"&gt;&lt;/img&gt;](https://www.stata.com/manuals/svy.pdf) &amp;nbsp;&amp;nbsp; &amp;nbsp;&amp;nbsp;&amp;nbsp;[Video: &lt;img src = "images/video.png" width = "50"&gt;&lt;/img&gt;](https://www.youtube.com/watch?v=BwIQSPoiRYA)  
+]
+
+---
+class: hide_logo
+### .center[.content-box-green[R]]
+&lt;br/&gt;
+
+```r
+library(survey)
+
+SDATA &lt;- svydesign(id = ~geo2, strata = ~geotype, weights = ~weights, nest = TRUE,
+                   fpc = NULL, data = DATA)
+
+svymean(~globorisk_nonlab, design = SDATA, na.rm = TRUE)
+```
+
+```
+                   mean     SE
+globorisk_nonlab 13.903 0.5788
+```
+
+```r
+mean(DATA$globorisk_nonlab, na.rm = TRUE)
+```
+
+```
+[1] 13.85389
+```
+
+---
+class: hide_logo
+
+.small[
+
+```r
+glm(globorisk_nonlab ~ age, family = gaussian, data = DATA)
+```
+
+```
+
+Call:  glm(formula = globorisk_nonlab ~ age, family = gaussian, data = DATA)
+
+Coefficients:
+(Intercept)          age  
+   -38.3147       0.9637  
+
+Degrees of Freedom: 4038 Total (i.e. Null);  4037 Residual
+Null Deviance:	    628900 
+Residual Deviance: 289500 	AIC: 28720
+```
+
+```r
+svyglm(globorisk_nonlab ~ age, family = gaussian, design = SDATA)
+```
+
+```
+Stratified 1 - level Cluster Sampling design (with replacement)
+With (92) clusters.
+svydesign(id = ~geo2, strata = ~geotype, weights = ~weights, 
+    nest = TRUE, fpc = NULL, data = DATA)
+
+Call:  svyglm(formula = globorisk_nonlab ~ age, design = SDATA, family = gaussian)
+
+Coefficients:
+(Intercept)          age  
+    -40.020        1.018  
+
+Degrees of Freedom: 4038 Total (i.e. Null);  89 Residual
+Null Deviance:	    664000 
+Residual Deviance: 296000 	AIC: 31280
+```
+]
+---
+class: hide_logo
+### .center[.content-box-green[Stata]]
+&lt;br/&gt;
+&lt;br/&gt;
+.pull-left[
+&lt;img src = "images/stata3.png" style ="width: 90%;"&gt;&lt;/img&gt;
+&lt;img src = "images/stata4.png" style ="width: 60%;"&gt;&lt;/img&gt;
+]
+
+.pull-right[
+&lt;img src = "images/stata1.png" style ="width: 90%;"&gt;&lt;/img&gt;
+&lt;br/&gt;
+&lt;img src = "images/stata2.png" style ="width: 90%;"&gt;&lt;/img&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;img src = "images/stata5.png" style ="width: 90%;"&gt;&lt;/img&gt;
+&lt;br/&gt;
+&lt;img src = "images/stata6.png" style ="width: 90%;"&gt;&lt;/img&gt;
+]
+] 
+
+---
+class: hide_logo
+background-image: url("images/reading.png")
+background-position: 90% 90%
+background-size: 20%
+## References  
+
+
+.scriptsize[
+Freedman, D. A. (2006). "On the so-called “Huber sandwich estimator”
+and “robust standard errors”". In: _The American Statistician_ 60.4,
+pp. 299-302.
+
+Lumley, T. (2004). "Analysis of Complex Survey Samples". In: _Journal
+of statistical software_ 9, pp. 1-19.
+
+Lumley, T. (2011). _Complex surveys: a guide to analysis using R_. John
+Wiley &amp; Sons.
+
+MacKinnon, J. G., M. Ø. Nielsen, and M. D. Webb (2023). "Cluster-Robust
+Inference: A Guide to Empirical Practice". In: _Journal of
+Econometrics_ 232.2, pp. 272-299. ISSN: 0304-4076. DOI:
+[10.1016/j.jeconom.2022.04.001](https://doi.org/10.1016%2Fj.jeconom.2022.04.001).
+(Visited on May. 07, 2023).
+
+Muff, S., L. Held, and L. F. Keller (2016). "Marginal or Conditional
+Regression Models for Correlated Non-Normal Data?" In: _Methods in
+Ecology and Evolution_ 7.12, pp. 1514-1524. ISSN: 2041-210X. DOI:
+[10.1111/2041-210X.12623](https://doi.org/10.1111%2F2041-210X.12623).
+(Visited on May. 07, 2023).
+]
+
+---
+class: su-white
+&lt;br/&gt;&lt;br/&gt;
+
+.font200[
+&lt;p style ="font-size:200%; margin-bottom: -10px; margin-left: -5px;"&gt;Thank You!&lt;/p&gt;
+[ acois@sun.ac.za](mailto:acois@sun.ac.za)
+]
+&lt;br/&gt;&lt;br/&gt;
+
+&lt;div style = "text-align: right; position: fixed; right: 100px;"&gt;
+
+&lt;img src = "images/github.png" width = "85"&gt;&lt;/img&gt; &lt;br/&gt;&lt;br/&gt;
+The rmarkdown code of this presentation is available on GitHub: &lt;br/&gt; 
+&lt;a href = "https://github.com/AnnibaleCois/SurveyData"&gt;https://github.com/AnnibaleCois/SurveyData&lt;/a&gt; 
+
+&lt;/div&gt;
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="assets/remark-zoom.js"></script>
+<script src="assets/cols_macro.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"ratio": "16:9",
+"countIncrementalSlides": true,
+"navigation": {
+"scroll": false
+}
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
