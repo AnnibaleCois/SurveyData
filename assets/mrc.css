@@ -16,7 +16,7 @@ Adapted form Sydney University Theme
   margin-bottom: 10px;
 }
 .remark-slide-content > h2:first-of-type {
-  color: #561a34; 
+  color: #007db6; 
   margin-top: 5px;
   margin-bottom: 10px;
 }
@@ -256,7 +256,7 @@ blockquote, .blockquote {
 .segue-su-darkpurple {
   text-align:center;
   vertical-align: middle;
-  background-color: #561a34;
+  background-color: #007db6;
   color: #ffffff;
   text-shadow: 0 0 2px #333;
 }
@@ -343,7 +343,7 @@ blockquote, .blockquote {
 .content-box-army {	background-color: #737a36; }
 .content-box-green { background-color: #d9edc2; }
 .content-box-darkorange { background-color: #c93f25; }
-.content-box-darkpurple { background-color: #561a34; }
+.content-box-darkpurple { background-color: #007db6; }
 .content-box-darkyellow { background-color: #ba8b53; }
 
 .content-box-red { background-color: #ffcccc; }
@@ -403,17 +403,16 @@ blockquote, .blockquote {
   color: white;
 }
 .su-darkpurple {
-  background-color: #561a34; 
+  background-color: #007db6; 
   color: white;
 }
 .su-lightpurple {
   background-color: #60223b; 
   color: white;
 }
-
 .su-white {
   background-color: #FFFFFF; 
-  color: #561a34;
+  color: #007db6;
 }
 
 /* Example slides */
@@ -533,14 +532,15 @@ a, a > code {
 /* With background */
 
 .title-slide {
-  background-image: url(seminars.png), url(subanner_3.jpg);
+  background-image: url(seminars.png), url(mrcbanner.jpg);
   background-position: 0% 3%, 50% 50%;
   background-size: 100%, 100% 100%;
   background-color: white;
   text-align:left;
   vertical-align: top;
   text-shadow: none;
-  padding-left: 90px;   /*delete this for 4:3 aspect ratio */
+  padding-left: 40px;   
+  padding-top: 90px;
 }
 
 /* Only Logo 
@@ -672,4 +672,8 @@ ul, ol {
 */
 
 
+.grid {
+  position: relative;
+  top: -50%;
+}
 

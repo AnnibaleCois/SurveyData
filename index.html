@@ -3,13 +3,13 @@
   <head>
     <title>Survey data and weighted regression</title>
     <meta charset="utf-8" />
-    <meta name="author" content="Department of Global Health, Stellenbosch University &amp;   School of Public Health, University of Cape Town  Contacts: acois@sun.ac.za ORCID: 0000-0002-7014-6510 Web of Science: AAK-8603-2020" />
-    <meta name="date" content="2023-05-11" />
-    <script src="index_files/header-attrs-2.16/header-attrs.js"></script>
+    <meta name="author" content="Burden of Disease Research Unit, South African Medical Research Council &amp;   School of Public Health, University of Cape Town  Contacts: acois@sun.ac.za ORCID: 0000-0002-7014-6510 Web of Science: AAK-8603-2020" />
+    <meta name="date" content="2024-05-09" />
+    <script src="index_files/header-attrs-2.25/header-attrs.js"></script>
     <link href="index_files/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="index_files/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
     <script src="index_files/tile-view-0.2.6/tile-view.js"></script>
-    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"d5f87bf2dcae43de8fdc50e65a002a83","expires":14}</script>
+    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"f9b4c95fda1a42ed9cfb3976cedae360","expires":14}</script>
     <script src="index_files/himalaya-1.1.0/himalaya.js"></script>
     <script src="index_files/js-cookie-3.0.0/js.cookie.js"></script>
     <link href="index_files/editable-0.2.6/editable.css" rel="stylesheet" />
@@ -36,7 +36,7 @@
     </style>
     <link rel="stylesheet" href="assets/sydney-fonts.css" type="text/css" />
     <link rel="stylesheet" href="assets/sydney.css" type="text/css" />
-    <link rel="stylesheet" href="assets/stellenbosch.css" type="text/css" />
+    <link rel="stylesheet" href="assets/mrc.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -49,15 +49,18 @@ class: center, middle, inverse, title-slide
 ## Annibale Cois
 ]
 .author[
-### <span style="font-size: 80%;">Department of Global Health, Stellenbosch University &amp; <br/> School of Public Health, University of Cape Town<br/><br/>Contacts: <a href="mailto:acois@sun.ac.za" class="email">acois@sun.ac.za</a><br/>ORCID: <a href="https://orcid.org/0000-0002-7014-6510">0000-0002-7014-6510</a><br/>Web of Science: <a href="https://www.webofscience.com/wos/author/rid/AAK-8603-2020">AAK-8603-2020</a></span>
+### <span style="font-size: 80%;">Burden of Disease Research Unit, South African Medical Research Council &amp; <br/> School of Public Health, University of Cape Town<br/><br/>Contacts: <a href="mailto:acois@sun.ac.za" class="email">acois@sun.ac.za</a><br/>ORCID: <a href="https://orcid.org/0000-0002-7014-6510">0000-0002-7014-6510</a><br/>Web of Science: <a href="https://www.webofscience.com/wos/author/rid/AAK-8603-2020">AAK-8603-2020</a></span>
 ]
 .date[
-### <span style="color: #A88B53; position: relative; top: 150px;">11 May 2023</span>
+### <span style="color: #A88B53; position: relative; top: 90px;">9 May 2024</span>
 ]
 
 ---
 
 class: hide_logo
+background-image: url("assets/mrcdeclaration.png")
+background-position: 50% 50%
+background-size: 100%
 
 
 <div>
@@ -65,7 +68,7 @@ class: hide_logo
 width: 150px;
 height: 46px;
 z-index: 0;
-background-image: url(assets/sulogo_1.png);
+background-image: url(assets/mrclogo_1.png);
 background-size: contain;
 background-repeat: no-repeat;
 position: absolute;
@@ -93,8 +96,10 @@ bottom:1em;left:60px;
   document.addEventListener('DOMContentLoaded', addLogo)
 })()</script>
 </div>
+---
+class: hide_logo
 
-## Outline &lt;svg viewBox="0 0 512 512" style="height:1em;display:inline-block;fill:#561a34;position:fixed;top:38;right:50;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M80 368H16a16 16 0 0 0-16 16v64a16 16 0 0 0 16 16h64a16 16 0 0 0 16-16v-64a16 16 0 0 0-16-16zm0-320H16A16 16 0 0 0 0 64v64a16 16 0 0 0 16 16h64a16 16 0 0 0 16-16V64a16 16 0 0 0-16-16zm0 160H16a16 16 0 0 0-16 16v64a16 16 0 0 0 16 16h64a16 16 0 0 0 16-16v-64a16 16 0 0 0-16-16zm416 176H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16z"&gt;&lt;/path&gt;&lt;/svg&gt;
+## Outline &lt;svg viewBox="0 0 512 512" style="height:1em;display:inline-block;fill:#007db6;position:fixed;top:38;right:50;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M80 368H16a16 16 0 0 0-16 16v64a16 16 0 0 0 16 16h64a16 16 0 0 0 16-16v-64a16 16 0 0 0-16-16zm0-320H16A16 16 0 0 0 0 64v64a16 16 0 0 0 16 16h64a16 16 0 0 0 16-16V64a16 16 0 0 0-16-16zm0 160H16a16 16 0 0 0-16 16v64a16 16 0 0 0 16 16h64a16 16 0 0 0 16-16v-64a16 16 0 0 0-16-16zm416 176H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16z"&gt;&lt;/path&gt;&lt;/svg&gt;
 &lt;br/&gt;
 - ### Survey data? 
 - ### Complex sampling designs 
@@ -104,9 +109,17 @@ bottom:1em;left:60px;
 Examples: &lt;img src = "images/rlogo.png" height = "50"&gt;, &lt;/img&gt;&amp;nbsp;&lt;img src = "images/statalogo.png" height = "50"&gt;
   
 ???
+h: toggle help page
 
 shift-c : open a cloned window
 shift-p : toggle to presenter mode
+t :restart the timer in the presenter mode
+
+number + enter : jump to a specific slide
+
+b : black out a slide
+m : “mirror” a slide (reverse everything on the slide)
+f : toggle the fullscreen mode.
 
 
 ---
@@ -119,12 +132,25 @@ class: hide_logo
 ???
 Key words: 
 1. **Simple random sampling**: equal probability of selection of all member of the target population; 
-2. **Large (Infinite) population**: large population compared to sample size (pop/sample &gt; 10000) so sampling with replacement = sampling without replacement 
+2. **Large (Infinite) population**: large population -&gt; 
+   * asymptotic properties of the estimators 
+   * compared to sample size (pop/sample &gt; 10000) so sampling with replacement = sampling without replacement
+   * it makes sense to find ways of improving inefficiencies (practical consequences)
+
+NB: we talking and make examples when **households are the unit of analysis**, but the same principles apply when the unit of analysis are, for example, individuals, facilities, factories or objects or ...whatever you think about..
+
+---
+class: hide_logo
+background-image: url("images/sampling.png")
+background-position: 50% 60%
+background-size: 80%
+
+## Sampling strategies
 
 ---
 class: hide_logo
 
-## Sampling strategies 
+## Sampling strategies
 
 .center[
 ![](index_files/figure-html/survey_1a-1.png)&lt;!-- --&gt;
@@ -135,8 +161,11 @@ Simple random sampling
  
 ---
 class: hide_logo
+background-image: url("images/dwelling.png")
+background-position: 5% 60%
+background-size: 15%
 
-## Sampling strategies 
+## Sampling strategies
 
 .center[
 ![](index_files/figure-html/survey_1b-1.png)&lt;!-- --&gt;
@@ -144,8 +173,55 @@ class: hide_logo
 
 ---
 class: hide_logo
+background-image: url("images/list_1.png")
+background-position: 5% 60%
+background-size: 15%
 
-## Sampling strategies 
+## Sampling strategies: *simple* random sampling 
+
+.center[
+![](index_files/figure-html/survey_1c-1.png)&lt;!-- --&gt;
+]
+
+---
+class: hide_logo
+background-image: url("images/list_2.png")
+background-position: 5% 60%
+background-size: 15%
+
+## Sampling strategies: *simple* random sampling 
+
+.center[
+![](index_files/figure-html/survey_1d-1.png)&lt;!-- --&gt;
+]
+
+---
+class: hide_logo
+
+## Sampling strategies: *simple* random sampling 
+
+&lt;br/&gt; &lt;br/&gt;
+
+.pull-left[
+.content-box-green[
+- **conceptually simple**
+- fits common **statistical assumptions**: *independence*, *same probability of selection* (i.i.d.) 
+- **efficient**
+]
+]
+
+.pull-right[
+.content-box-red[
+- **expensive**
+- very often **unpractical**
+- often **impossible** in large surveys
+]
+]
+
+---
+class: hide_logo
+
+## Sampling strategies: *cluster* (random) sampling 
 
 .center[
 ![](index_files/figure-html/survey_2a-1.png)&lt;!-- --&gt;
@@ -153,46 +229,71 @@ class: hide_logo
 
 ???
 more efficient (in a practical sense, not statistical)
-We consider the 53 distrcits in SA
+We consider the 52 districts in SA
 and we select some of them, say 18
 
 ---
 class: hide_logo
 
-## Sampling strategies 
+## Sampling strategies: *cluster* (random) sampling  
 
 .center[
 ![](index_files/figure-html/survey_2b-1.png)&lt;!-- --&gt;
 ]
 
 ???
-OK if we are interested in estimates for the whole country only.
-But not if we want lower levele stimates (e.g. at provincial level)
+
 
 ---
 class: hide_logo
 
-## Sampling strategies 
+## Sampling strategies: *cluster* (random) sampling  
  
 .center[
 ![](index_files/figure-html/survey_2c-1.png)&lt;!-- --&gt;
 ]
+
+---
+class: hide_logo
+
+## Sampling strategies: *cluster* (random) sampling 
+
+&lt;br/&gt; &lt;br/&gt;
+
+.pull-left[
+.content-box-green[
+- **less expensive** than SRS
+- the **only possibility** for some study designs (e.g. some trials to test population interventions where no blinding is possible)
+]
+]
+
+.pull-right[
+.content-box-red[
+- **reduced statistical power** (i.e. it requires larger samples for the same precision/power, compared to SRS)
+- the observations are **not independent**
+]
+]
+
 ---
 class: hide_logo
  
-## Sampling strategies 
+## Sampling strategies: *stratified* (cluster random) sampling  
+
 .center[
 ![](index_files/figure-html/survey_2d-1.png)&lt;!-- --&gt;
 ]
 
 ???
+OK if we are interested in estimates for the whole country only.
+But not if we want lower level estimates (e.g. at provincial level: some province have too small samples...)
+
 Stratified sampling: we repeat the process separately for each stratum (== province))
-E.g. 2 district per province, and 6 individuals per district
+E.g. 2 district per province, and 6 individuals per district. we ensure representation at lower level...
 
 ---
 class: hide_logo
  
-## Sampling strategies 
+## Sampling strategies: *stratified* (cluster random) sampling   
 
 .center[
 ![](index_files/figure-html/survey_3a-1.png)&lt;!-- --&gt;
@@ -204,71 +305,86 @@ Better, but....
 ---
 class: hide_logo
  
-## Sampling strategies 
+## Sampling strategies: *stratified* (cluster random) sampling   
 
 .center[
 ![](index_files/figure-html/survey_3b-1.png)&lt;!-- --&gt;
 ]
 
 ???
+
+---
+class: hide_logo
+
+## Sampling strategies: *stratified* (random random) sampling 
+
+.center[
+
+  ![](index_files/figure-html/survey_3c-1.png)&lt;!-- --&gt;
+]
+
+???
+  Disproportionate sampling 
+PPS (probability proportional to size and self-weighting)
+
+---
+class: hide_logo
+
+## Sampling strategies: *stratified* (cluster random) sampling 
+
+&lt;br/&gt; &lt;br/&gt;
+
+.pull-left[
+.content-box-green[
+- increased **statistical power** (i.e. it requires smaller samples for the same precision/power, compared to clustering alone)
+- ensure adequate power/precision for **sub-populations**
+]
+]
+
+.pull-right[
+.content-box-red[
+- **more expensive** than cluster sampling 
+- in general the **probability of section of individuals are not equal**
+]
+]
+
+---
+class: hide_logo
+background-image: url("images/list_3.png")
+background-position: 5% 60%
+background-size: 15%
+
+## Unequal probability of selection 
+
+.center[
+
+  ![](index_files/figure-html/survey_3d-1.png)&lt;!-- --&gt;
+]
+
+???
 small provinces and large provinces have the same number of individuals....
 
----
-class: hide_logo
- 
-## Sampling strategies 
-
-.center[
-![](index_files/figure-html/survey_3c-1.png)&lt;!-- --&gt;
-]
-
-???
-Disproportionate sampling 
-Comment on self-weightinhg
+Solution: Disproportionate sampling (common)
+PPS (probability proportional to size and self-weighting)
 
 ---
 class: hide_logo
- 
-## Sampling strategies 
-  
-.center[
-![](index_files/figure-html/survey_3d-1.png)&lt;!-- --&gt;
-]
+background-image: url("images/notiid.png")
+background-position: 50% 20%
+background-size: 40%
 
----
-class: hide_logo
-background-image: url("images/enumeration.png")
-background-position: 50% 50%
-background-size: 50%
+## Survey data:  
 
-## In reality... 
+--
+&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;
+
+.content-box-red[.Large[Clustering]] --&gt; .content-box-red[.Large[non-independence]]
+&lt;br/&gt;
+.content-box-yellow[.Large[Stratification]] --&gt; .content-box-yellow[.Large[unequal probability of selection]] 
+
 
 ???
-Statistics South Africa enumeration areas (Free State)
-
----
-class: hide_logo, middle, center
-
-
-.pull-left[
-# .content-box-yellow[Unequal sampling] 
-
-]
-
-.pull-right[
-# .content-box-red[Clustering]  
-]
-
-.pull-left[
-# .content-box-yellow[Stratification]  
-]
-
-.pull-right[
-# .content-box-green[Finite population] 
-]
-
-???
-Characteristics that differentiate complex sampling strategies used in surveys from simple random sampling.
+In an extreme synthesis, form a statistical point of view what differentiates complex sampling strategies used in surveys from simple random sampling is the fact that, in general, the observation you get with CRS are **not iid**.
 
 ---
 class: hide_logo, center, middle 
@@ -289,53 +405,99 @@ class: hide_logo, middle
 ]
  
 ???
+Statistics commonly deals with random samples. A random sample can be thought of as a set of objects that are chosen randomly. More formally, it is "a sequence of independent, identically distributed (IID) random data points".
+
+In other words, the terms random sample and IID are one and the same. In statistics, "random sample" is the typical terminology, but in probability, it is more common to say "IID".
+
+Identically distributed means that there are no overall trends—the distribution does not fluctuate and all items in the sample are taken from the same probability distribution.
+Independent means that the sample items are all independent events. In other words, they are not connected to each other in any way;[2] knowledge of the value of one variable gives no information about the value of the other and vice versa.
+
 Ignoring the sampling strategy in the (i.e. assuming that it was simple random sampling) introduces bias in the estimates and incorrect quantification of sampling error
 
 ---
 class: hide_logo, middle, center
 
-# .content-box-yellow[Unequal sampling, stratification] 
+# .content-box-yellow[Stratification] 
 
 ---
 class: hide_logo
-# An example Dataset
 
+## An example Dataset
+
+
+
+
+```r
+nrow(DATA) 
+```
+
+```
+[1] 4039
+```
 
 ```r
 summary(DATA[, c(1:3,5,7)])
 ```
 
 ```
- globorisk_nonlab       geo1           geo2          sex            age       
- Min.   : 0.4883   KZN    : 548   CPT    : 243   Female:2531   Min.   :40.00  
- 1st Qu.: 4.6260   EC     : 538   DC37   : 212   Male  :1508   1st Qu.:46.00  
- Median : 9.9352   NW     : 531   ETH    : 190                 Median :53.00  
- Mean   :13.8539   LI     : 524   CBDC3  : 178                 Mean   :54.14  
- 3rd Qu.:19.3503   MP     : 428   DC17   : 173                 3rd Qu.:62.00  
- Max.   :87.5525   FS     : 421   DC15   : 138                 Max.   :74.00  
-                   (Other):1049   (Other):2905                                
+ globorisk_nonlab        geo1           geo2          sex            age       
+ Min.   :  0.4899   KZN    : 548   CPT    : 243   Female:2531   Min.   :40.00  
+ 1st Qu.:  5.1363   EC     : 538   DC37   : 212   Male  :1508   1st Qu.:46.00  
+ Median : 11.3742   NW     : 531   ETH    : 190                 Median :53.00  
+ Mean   : 17.6965   LI     : 524   CBDC3  : 178                 Mean   :54.14  
+ 3rd Qu.: 22.4955   MP     : 428   DC17   : 173                 3rd Qu.:62.00  
+ Max.   :219.7641   FS     : 421   DC15   : 138                 Max.   :74.00  
+                    (Other):1049   (Other):2905                                
 ```
+&lt;br/&gt;
 
+# .content-box-yellow[TRUE POPULATION RISK: 19.5%]
 
 ???
 South African population 40-74 years
 Estimated 10 years cardiovascular risk
-Example dataset, modified for teaching purposes...
+Example dataset, modified for teaching purposes... (KZN has higher risk, but not so much higher)
 
 ---
 class: hide_logo
 
+## Estimation average **population** risk 
+
+--
+
 
 ```r
-mean(DATA$globorisk_nonlab) 
+round(mean(DATA$globorisk_nonlab),1)
 ```
 
 ```
-[1] 13.85389
+[1] 17.7
 ```
+
+.pull-left[
+.content-box-yellow[ESTIMATE: 17.7%]
+]
+.pull-right[
+.content-box-yellow[TRUE VALUE: 19.5%]
+]
+
+--
+&lt;br/&gt;&lt;br/&gt;
+.center[
+# .content-box-yellow[WHAT HAPPENED?]
+]
+
+???
+Estimating average cardiovascular risk
+sample mean is unbiased estimate of population mean in case of SRS
+
+---
+class: hide_logo
+
+.pull-left[
 
 ```r
-aggregate(DATA$globorisk_nonlab, by = list(DATA$geo1), FUN = mean)
+aggregate(DATA$globorisk_nonlab, by = list(DATA$geo1), FUN = mean) 
 ```
 
 ```
@@ -343,54 +505,49 @@ aggregate(DATA$globorisk_nonlab, by = list(DATA$geo1), FUN = mean)
 1      EC 14.74044
 2      FS 13.60239
 3      GT 12.64429
-4     KZN 14.16086
+4     KZN 42.48257
 5      LI 12.99496
 6      MP 12.87967
 7      NC 15.30294
 8      NW 13.49184
 9      WC 15.27239
 ```
+]
 
-
-???
-Estimating average cardiovascular risk
-
----
-class: hide_logo
-
+.pull-right[
 
 ```r
-cbind(data.frame(table(DATA$geo1)), POP2016)
+df &lt;- merge(data.frame(table(DATA$geo1)), POP2016, by.x = "Var1", by.y = "geo1") %&gt;% rename(geo1 = Var1)
+df
 ```
 
 ```
-  Var1 Freq geo1      pop
-1   EC  538   EC  7061700
-2   FS  421   FS  2861600
-3   GT  372   GT 13498200
-4  KZN  548  KZN 11079700
-5   LI  524   LI  5803900
-6   MP  428   MP  4328300
-7   NC  315   NC  1191700
-8   NW  531   NW  3790600
-9   WC  362   WC  6293200
+  geo1 Freq      pop
+1   EC  538  7061700
+2   FS  421  2861600
+3   GT  372 13498200
+4  KZN  548 11079700
+5   LI  524  5803900
+6   MP  428  4328300
+7   NC  315  1191700
+8   NW  531  3790600
+9   WC  362  6293200
 ```
- 
+]
+
 ---
 class: hide_logo
+
 .small[
 
 ```r
-psamp &lt;- table(DATA$geo1)/POP2016$pop  
+psamp &lt;- df$Freq/df$pop  
 psamp
 ```
 
 ```
-
-          EC           FS           GT          KZN           LI           MP 
-7.618562e-05 1.471205e-04 2.755923e-05 4.945982e-05 9.028412e-05 9.888409e-05 
-          NC           NW           WC 
-2.643283e-04 1.400834e-04 5.752241e-05 
+[1] 7.618562e-05 1.471205e-04 2.755923e-05 4.945982e-05 9.028412e-05
+[6] 9.888409e-05 2.643283e-04 1.400834e-04 5.752241e-05
 ```
 
 ```r
@@ -399,11 +556,8 @@ sweight
 ```
 
 ```
-
-       EC        FS        GT       KZN        LI        MP        NC        NW 
-13125.836  6797.150 36285.484 20218.431 11076.145 10112.850  3783.175  7138.606 
-       WC 
-17384.530 
+[1] 13125.836  6797.150 36285.484 20218.431 11076.145 10112.850  3783.175
+[8]  7138.606 17384.530
 ```
 
 ```r
@@ -412,38 +566,67 @@ sweight
 ```
 
 ```
-
-        EC         FS         GT        KZN         LI         MP         NC 
-0.10423766 0.05397896 0.28815794 0.16056287 0.08796022 0.08031030 0.03004374 
-        NW         WC 
-0.05669061 0.13805770 
+[1] 0.10423766 0.05397896 0.28815794 0.16056287 0.08796022 0.08031030 0.03004374
+[8] 0.05669061 0.13805770
 ```
  ]
+
 ---
 class: hide_logo
 
 
 ```r
-aest &lt;- aggregate(DATA$globorisk_nonlab, by = list(DATA$geo1), FUN = mean)$x # BREAK
-west &lt;- aest %*% sweight 
-west
+WEIGHTS &lt;- data.frame(sweight = sweight, geo1 = df$geo1)
+DATA &lt;- merge(DATA,WEIGHTS)
+
+head(DATA[, c(1:7,12)])
 ```
 
 ```
-         [,1]
-[1,] 13.69851
+  geo1 globorisk_nonlab geo2   geotype    sex          race age   sweight
+1   EC        12.334749 DC12     Urban Female Black African  61 0.1042377
+2   EC        22.423466 DC14     Urban   Male Black African  60 0.1042377
+3   EC        29.687303 DC14     Urban Female Black African  57 0.1042377
+4   EC         8.035523 DC14     Urban   Male         White  50 0.1042377
+5   EC         9.019704 DC14 Non-urban Female Black African  54 0.1042377
+6   EC         1.260133 DC12     Urban Female Black African  40 0.1042377
 ```
+
+--
+
 
 ```r
-mean(DATA$globorisk_nonlab) 
+weighted.mean(DATA1$globorisk_nonlab,DATA1$sweight,na.rm = TRUE)
 ```
 
 ```
-[1] 13.85389
+[1] 19.33585
 ```
  
+---
+class: hide_logo
+
+
+
+```r
+aest &lt;- aggregate(DATA[,c("globorisk_nonlab","sweight")], by = list(DATA$geo1), FUN = mean, data = DATA, na.rm = TRUE) 
+aest
+```
+
+```
+  Group.1 globorisk_nonlab    sweight
+1      EC         14.74044 0.10423766
+2      FS         13.60239 0.05397896
+3      GT         12.64429 0.28815794
+4     KZN         42.48257 0.16056287
+5      LI         12.99496 0.08796022
+6      MP         12.87967 0.08031030
+7      NC         15.30294 0.03004374
+8      NW         13.49184 0.05669061
+9      WC         15.27239 0.13805770
+```
+
 ???
-bias!
 
 ---
 class: hide_logo, center, middle 
@@ -463,11 +646,11 @@ Call:  glm(formula = globorisk_nonlab ~ age, family = gaussian(link = "identity"
 
 Coefficients:
 (Intercept)          age  
-   -38.3147       0.9637  
+    -49.507        1.241  
 
 Degrees of Freedom: 4038 Total (i.e. Null);  4037 Residual
-Null Deviance:	    628900 
-Residual Deviance: 289500 	AIC: 28720
+Null Deviance:	    1771000 
+Residual Deviance: 1208000 	AIC: 34490
 ```
   
 ???
@@ -479,10 +662,6 @@ class: hide_logo
   
 
 ```r
-WEIGHTS &lt;- data.frame(sweight)
-colnames(WEIGHTS) &lt;- c("geo1","sweight")
-DATA &lt;- merge(DATA, WEIGHTS)
-
 glm(globorisk_nonlab ~ age, family = gaussian(link = "identity"), 
     weights = DATA$sweight, data = DATA)
 ```
@@ -494,13 +673,12 @@ Call:  glm(formula = globorisk_nonlab ~ age, family = gaussian(link = "identity"
 
 Coefficients:
 (Intercept)          age  
-   -38.5609       0.9702  
+    -55.621        1.391  
 
 Degrees of Freedom: 4038 Total (i.e. Null);  4037 Residual
-Null Deviance:	    68900 
-Residual Deviance: 31090 	AIC: 29320
+Null Deviance:	    248600 
+Residual Deviance: 170900 	AIC: 36200
 ```
-
 
 ---
 class: hide_logo, middle, center
@@ -531,7 +709,7 @@ background-size: 80%
 
 ???
 simple random sample
-increasing sample size we increase the 'information' we have on teh population
+increasing sample size we increase the 'information' we have on the population
 
 ---
 class: hide_logo
@@ -541,7 +719,7 @@ background-size: 80%
 
 ???
 simple random sample
-increasing sample size we don't increase the 'information' we have on the population (new element very similar to teh previous do not add any information...in this extreme case they are useless...)
+increasing sample size we don't increase the 'information' we have on the population (new element very similar to the previous do not add any information...in this extreme case they are useless...)
 
 ---
 class: hide_logo
@@ -588,7 +766,7 @@ class: hide_logo
 ]
 
 .pull-right[
-.center[#### .content-box-green[ICC = 0.65, DEFF = 31.98, NEFF = 17]]
+.center[#### .content-box-green[ICC = 0.64, DEFF = 31.59, NEFF = 17]]
 &lt;img src="index_files/figure-html/survey_6b-1.png" width="400px" /&gt;
 ]
 
@@ -629,21 +807,11 @@ class: hide_logo
 # Conditional Models
 
 &lt;br/&gt;&lt;br/&gt;&lt;br/&gt;
-$$
-\operatorname{globorisk} = \alpha + \epsilon
-$$
 
 $$
 \operatorname{globorisk} = \alpha + \beta_{1}(\operatorname{age}) + \epsilon
 $$
 
-$$
-`\begin{aligned}
-  \operatorname{globorisk}_{i}  &amp;\sim N \left(\alpha_{j[i]}, \sigma^2 \right) \\
-    \alpha_{j}  &amp;\sim N \left(\mu_{\alpha_{j}}, \sigma^2_{\alpha_{j}} \right)
-    \text{, for geo1 j = 1,} \dots \text{,J}
-\end{aligned}`
-$$
 
 $$
 `\begin{aligned}
@@ -652,58 +820,6 @@ $$
     \text{, for geo1 j = 1,} \dots \text{,J}
 \end{aligned}`
 $$
-
----
-class: hide_logo
-
-.small[
-.pull-left[
-
-```r
-nm &lt;- lm(globorisk_nonlab ~ 1, 
-            data = DATA)
-summary(nm)$coefficients
-```
-
-```
-            Estimate Std. Error  t value Pr(&gt;|t|)
-(Intercept) 13.85389  0.1963625 70.55261        0
-```
-]
-
-.pull-right[
-
-```r
-library(lme4)
-cm &lt;- lmer(globorisk_nonlab ~ (1 | geo1), 
-             data = DATA)
-summary(cm)
-```
-
-```
-Linear mixed model fit by REML ['lmerMod']
-Formula: globorisk_nonlab ~ (1 | geo1)
-   Data: DATA
-
-REML criterion at convergence: 31847.2
-
-Scaled residuals: 
-    Min      1Q  Median      3Q     Max 
--1.1199 -0.7397 -0.3152  0.4408  5.9339 
-
-Random effects:
- Groups   Name        Variance Std.Dev.
- geo1     (Intercept)   0.5982  0.7734 
- Residual             155.2405 12.4596 
-Number of obs: 4039, groups:  geo1, 9
-
-Fixed effects:
-            Estimate Std. Error t value
-(Intercept)  13.8777     0.3252   42.67
-```
-]
-]
-
 ---
 class: hide_logo
 
@@ -717,9 +833,9 @@ summary(nm)$coefficients
 ```
 
 ```
-               Estimate Std. Error   t value Pr(&gt;|t|)
-(Intercept) -38.3147216 0.76990386 -49.76559        0
-age           0.9636685 0.01400722  68.79799        0
+              Estimate Std. Error   t value      Pr(&gt;|t|)
+(Intercept) -49.506886 1.57286973 -31.47552 1.162231e-194
+age           1.241394 0.02861595  43.38118  0.000000e+00
 ```
 ]
 
@@ -738,26 +854,26 @@ Linear mixed model fit by REML ['lmerMod']
 Formula: globorisk_nonlab ~ age + (1 | geo1)
    Data: DATA
 
-REML criterion at convergence: 28703.8
+REML criterion at convergence: 32958.7
 
 Scaled residuals: 
     Min      1Q  Median      3Q     Max 
--2.1019 -0.5977 -0.1072  0.3376  8.0264 
+-2.5214 -0.5032 -0.0369  0.3414 10.7295 
 
 Random effects:
  Groups   Name        Variance Std.Dev.
- geo1     (Intercept)  0.7427  0.8618  
- Residual             71.0695  8.4303  
+ geo1     (Intercept)  91.03    9.541  
+ Residual             202.46   14.229  
 Number of obs: 4039, groups:  geo1, 9
 
 Fixed effects:
              Estimate Std. Error t value
-(Intercept) -38.38573    0.82037  -46.79
-age           0.96661    0.01399   69.09
+(Intercept) -50.31472    3.43494  -14.65
+age           1.24591    0.02363   52.73
 
 Correlation of Fixed Effects:
     (Intr)
-age -0.922
+age -0.372
 ```
 ]
 ]
@@ -766,13 +882,18 @@ age -0.922
 class: hide_logo
 
 # Marginal Models
-&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;
+&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;
 $$
 `\begin{aligned}
 \mu_i = \beta_{0} + \beta_{1}(\operatorname{age_i}) \\
-\sum_{i=1}^{N}{\frac{\partial \mu_i}{\partial \beta}V_i^{-1}\{Y_i-\mu_i(\beta)\}}
+Var(globorisk_{nonlab}) = \Sigma
 \end{aligned}`
 $$
+
+???
+
+Sigma = nuisance parameter of assumed structure
+
 ---
 class: hide_logo
 
@@ -786,9 +907,9 @@ summary(nm)$coefficients
 ```
 
 ```
-               Estimate Std. Error   t value Pr(&gt;|t|)
-(Intercept) -38.3147216 0.76990386 -49.76559        0
-age           0.9636685 0.01400722  68.79799        0
+              Estimate Std. Error   t value      Pr(&gt;|t|)
+(Intercept) -49.506886 1.57286973 -31.47552 1.162231e-194
+age           1.241394 0.02861595  43.38118  0.000000e+00
 ```
 ]
 
@@ -796,6 +917,9 @@ age           0.9636685 0.01400722  68.79799        0
 
 ```r
 library(gee)
+DATA &lt;- DATA[order(DATA$geo1),]
+
+
 mm &lt;- gee(globorisk_nonlab ~ age + 1 , 
           id = geo1, 
           data = DATA,  
@@ -804,7 +928,7 @@ mm &lt;- gee(globorisk_nonlab ~ age + 1 ,
 
 ```
 (Intercept)         age 
--38.3147216   0.9636685 
+ -49.506886    1.241394 
 ```
 
 ```r
@@ -813,11 +937,11 @@ t(summary(mm)$coefficients)
 
 ```
             (Intercept)         age
-Estimate    -38.3836380  0.96650532
-Naive S.E.    0.8115373  0.01399094
-Naive z     -47.2974423 69.08080506
-Robust S.E.   0.6641536  0.01358678
-Robust z    -57.7933136 71.13572460
+Estimate     -50.315586  1.24591654
+Naive S.E.     3.758728  0.02267209
+Naive z      -13.386333 54.95376901
+Robust S.E.   11.470542  0.26759338
+Robust z      -4.386505  4.65600652
 ```
 ]
 ] 
@@ -887,8 +1011,8 @@ svymean(~globorisk_nonlab, design = SDATA, na.rm = TRUE)
 ```
 
 ```
-                   mean     SE
-globorisk_nonlab 13.903 0.5788
+                  mean     SE
+globorisk_nonlab 17.24 2.2321
 ```
 
 ```r
@@ -896,7 +1020,7 @@ mean(DATA$globorisk_nonlab, na.rm = TRUE)
 ```
 
 ```
-[1] 13.85389
+[1] 17.69649
 ```
 
 ---
@@ -914,11 +1038,11 @@ Call:  glm(formula = globorisk_nonlab ~ age, family = gaussian, data = DATA)
 
 Coefficients:
 (Intercept)          age  
-   -38.3147       0.9637  
+    -49.507        1.241  
 
 Degrees of Freedom: 4038 Total (i.e. Null);  4037 Residual
-Null Deviance:	    628900 
-Residual Deviance: 289500 	AIC: 28720
+Null Deviance:	    1771000 
+Residual Deviance: 1208000 	AIC: 34490
 ```
 
 ```r
@@ -935,11 +1059,11 @@ Call:  svyglm(formula = globorisk_nonlab ~ age, design = SDATA, family = gaussia
 
 Coefficients:
 (Intercept)          age  
-    -40.020        1.018  
+    -50.771        1.284  
 
 Degrees of Freedom: 4038 Total (i.e. Null);  89 Residual
-Null Deviance:	    664000 
-Residual Deviance: 296000 	AIC: 31280
+Null Deviance:	    1686000 
+Residual Deviance: 1101000 	AIC: 36580
 ```
 ]
 ---
@@ -969,7 +1093,7 @@ class: hide_logo
 class: hide_logo
 background-image: url("images/reading.png")
 background-position: 90% 90%
-background-size: 20%
+background-size: 40%
 ## References  
 
 
@@ -1003,7 +1127,7 @@ class: su-white
 
 .font200[
 &lt;p style ="font-size:200%; margin-bottom: -10px; margin-left: -5px;"&gt;Thank You!&lt;/p&gt;
-[ acois@sun.ac.za](mailto:acois@sun.ac.za)
+[annibale.cois@mrc.ac.za](mailto:annibale.cois@mrc.ac.za)
 ]
 &lt;br/&gt;&lt;br/&gt;
 
@@ -1014,6 +1138,7 @@ The rmarkdown code of this presentation is available on GitHub: &lt;br/&gt;
 &lt;a href = "https://github.com/AnnibaleCois/SurveyData"&gt;https://github.com/AnnibaleCois/SurveyData&lt;/a&gt; 
 
 &lt;/div&gt;
+
 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

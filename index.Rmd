@@ -1,11 +1,11 @@
 ---
 title: "Survey data and weighted regression"
 subtitle: "Annibale Cois"
-author: "<span style='font-size: 80%;'>Department of Global Health, Stellenbosch University &amp; <br/> School of Public Health, University of Cape Town<br/><br/>Contacts: acois@sun.ac.za<br/>ORCID: [0000-0002-7014-6510](https://orcid.org/0000-0002-7014-6510)<br/>Web of Science: [ AAK-8603-2020](https://www.webofscience.com/wos/author/rid/AAK-8603-2020)</span>" 
-date: "<span style = 'color: #A88B53; position: relative; top: 150px;'>11 May 2023</span>" 
+author: "<span style='font-size: 80%;'>Burden of Disease Research Unit, South African Medical Research Council &amp; <br/> School of Public Health, University of Cape Town<br/><br/>Contacts: acois@sun.ac.za<br/>ORCID: [0000-0002-7014-6510](https://orcid.org/0000-0002-7014-6510)<br/>Web of Science: [ AAK-8603-2020](https://www.webofscience.com/wos/author/rid/AAK-8603-2020)</span>" 
+date: "<span style = 'color: #A88B53; position: relative; top: 90px;'>9 May 2024</span>" 
 output:  
   xaringan::moon_reader:
-    css: ["default", "assets/sydney-fonts.css", "assets/sydney.css", "assets/stellenbosch.css"]
+    css: ["default", "assets/sydney-fonts.css", "assets/sydney.css", "assets/mrc.css"]
     self_contained: false # if true, fonts will be stored locally
     seal: true # show a title slide with YAML information
     includes:
@@ -20,6 +20,9 @@ output:
         scroll: false # disable slide transitions by scrolling
 ---
 class: hide_logo
+background-image: url("assets/mrcdeclaration.png")
+background-position: 50% 50%
+background-size: 100%
 ```{r setup, echo=FALSE}
 knitr::read_chunk('assets/init.R')
 ```
@@ -27,6 +30,8 @@ knitr::read_chunk('assets/init.R')
 ```{r, echo=FALSE, cache=FALSE, message=FALSE,  warning = FALSE}
 <<init>>
 ```
+---
+class: hide_logo
 
 ## Outline `r top_icon("list")`
 <br/>
@@ -38,9 +43,17 @@ knitr::read_chunk('assets/init.R')
 Examples: <img src = "images/rlogo.png" height = "50">, </img>&nbsp;<img src = "images/statalogo.png" height = "50">
   
 ???
+h: toggle help page
 
 shift-c : open a cloned window
 shift-p : toggle to presenter mode
+t :restart the timer in the presenter mode
+
+number + enter : jump to a specific slide
+
+b : black out a slide
+m : “mirror” a slide (reverse everything on the slide)
+f : toggle the fullscreen mode.
 
 
 ---
@@ -53,16 +66,71 @@ class: hide_logo
 ???
 Key words: 
 1. **Simple random sampling**: equal probability of selection of all member of the target population; 
-2. **Large (Infinite) population**: large population compared to sample size (pop/sample > 10000) so sampling with replacement = sampling without replacement 
+2. **Large (Infinite) population**: large population -> 
+   * asymptotic properties of the estimators 
+   * compared to sample size (pop/sample > 10000) so sampling with replacement = sampling without replacement
+   * it makes sense to find ways of improving inefficiencies (practical consequences)
+
+NB: we talking and make examples when **households are the unit of analysis**, but the same principles apply when the unit of analysis are, for example, individuals, facilities, factories or objects or ...whatever you think about..
+
+---
+class: hide_logo
+background-image: url("images/sampling.png")
+background-position: 50% 60%
+background-size: 80%
+
+## Sampling strategies
 
 ---
 class: hide_logo
 
-## Sampling strategies 
+## Sampling strategies
 
 .center[
 ```{r survey_1a, echo=FALSE}
+
+FR = 10000     # TOTAL NUMBER OF HOUSEHOLDS  
+SF <- 0.02   # SAMPLING FRACTION
+set.seed(1234)
+
+S1 <- spsample(as_Spatial(subset(PROV, prov_code == "EC")), 1263*FR/10000, type = "random")
+S <- SpatialPointsDataFrame(S1, data.frame(row.names=row.names(S1), ID=1:length(S1)))
+S1s <- S[sample(nrow(S), nrow(S)*SF),]
+
+S2 <- spsample(as_Spatial(subset(PROV, prov_code == "FS")), 512*FR/10000, type = "random")
+S <- SpatialPointsDataFrame(S2, data.frame(row.names=row.names(S2), ID=1:length(S2)))
+S2s <- S[sample(nrow(S), nrow(S)*SF),]
+
+S3 <- spsample(as_Spatial(subset(PROV, prov_code == "GT")), 2414*FR/10000, type = "random")
+S <- SpatialPointsDataFrame(S3, data.frame(row.names=row.names(S3), ID=1:length(S3)))
+S3s <- S[sample(nrow(S), nrow(S)*SF),]
+
+S4 <- spsample(as_Spatial(subset(PROV, prov_code == "KZN")), 1982*FR/10000, type = "random")
+S <- SpatialPointsDataFrame(S4, data.frame(row.names=row.names(S4), ID=1:length(S4)))
+S4s <- S[sample(nrow(S), nrow(S)*SF),]
+
+S5 <- spsample(as_Spatial(subset(PROV, prov_code == "LI")), 1038*FR/10000, type = "random")
+S <- SpatialPointsDataFrame(S5, data.frame(row.names=row.names(S5), ID=1:length(S5)))
+S5s <- S[sample(nrow(S), nrow(S)*SF),]
+
+S6 <- spsample(as_Spatial(subset(PROV, prov_code == "MP")), 774*FR/10000, type = "random")
+S <- SpatialPointsDataFrame(S6, data.frame(row.names=row.names(S6), ID=1:length(S6)))
+S6s <- S[sample(nrow(S), nrow(S)*SF),]
+
+S7 <- spsample(as_Spatial(subset(PROV, prov_code == "NC")), 213*FR/10000, type = "random")
+S <- SpatialPointsDataFrame(S7, data.frame(row.names=row.names(S7), ID=1:length(S7)))
+S7s <- S[sample(nrow(S), nrow(S)*SF),]
+
+S8 <- spsample(as_Spatial(subset(PROV, prov_code == "NW")), 678*FR/10000, type = "random")
+S <- SpatialPointsDataFrame(S8, data.frame(row.names=row.names(S8), ID=1:length(S8)))
+S8s <- S[sample(nrow(S), nrow(S)*SF),]
+
+S9 <- spsample(as_Spatial(subset(PROV, prov_code == "WC")), 1126*FR/10000, type = "random")
+S <- SpatialPointsDataFrame(S9, data.frame(row.names=row.names(S9), ID=1:length(S9)))
+S9s <- S[sample(nrow(S), nrow(S)*SF),]
+
 qtm(PROV, fill = "prov_code") + tm_layout(legend.show = FALSE, frame = FALSE) 
+
 ```
 ]
 
@@ -71,15 +139,87 @@ Simple random sampling
  
 ---
 class: hide_logo
+background-image: url("images/dwelling.png")
+background-position: 5% 60%
+background-size: 15%
 
-## Sampling strategies 
+## Sampling strategies
 
 .center[
 ```{r survey_1b, echo=FALSE}
+
+qtm(PROV, fill = "prov_code") + tm_layout(legend.show = FALSE, frame = FALSE) +
+qtm(S1, symbols.size = 0.5, symbols.col = "blue") +
+qtm(S2, symbols.size = 0.5, symbols.col = "blue") +
+qtm(S3, symbols.size = 0.5, symbols.col = "blue") +
+qtm(S4, symbols.size = 0.5, symbols.col = "blue") +
+qtm(S5, symbols.size = 0.5, symbols.col = "blue") +
+qtm(S6, symbols.size = 0.5, symbols.col = "blue") +
+qtm(S7, symbols.size = 0.5, symbols.col = "blue") +
+qtm(S8, symbols.size = 0.5, symbols.col = "blue") +
+qtm(S9, symbols.size = 0.5, symbols.col = "blue")
+
+```
+]
+
+---
+class: hide_logo
+background-image: url("images/list_1.png")
+background-position: 5% 60%
+background-size: 15%
+
+## Sampling strategies: *simple* random sampling 
+
+.center[
+```{r survey_1c, echo=FALSE}
 set.seed(1234)
 
-qtm(PROV, fill = "prov_code") + tm_layout(legend.show = FALSE, frame = FALSE) + # BREAK
-qtm(spsample(as_Spatial(PROV), 100, type = "random"), symbols.size = 0.5, symbols.col = "red")
+qtm(PROV, fill = "prov_code") + tm_layout(legend.show = FALSE, frame = FALSE) + 
+qtm(S1, symbols.size = 0.5, symbols.col = "blue") +
+qtm(S2, symbols.size = 0.5, symbols.col = "blue") +
+qtm(S3, symbols.size = 0.5, symbols.col = "blue") +
+qtm(S4, symbols.size = 0.5, symbols.col = "blue") +
+qtm(S5, symbols.size = 0.5, symbols.col = "blue") +
+qtm(S6, symbols.size = 0.5, symbols.col = "blue") +
+qtm(S7, symbols.size = 0.5, symbols.col = "blue") +
+qtm(S8, symbols.size = 0.5, symbols.col = "blue") +
+qtm(S9, symbols.size = 0.5, symbols.col = "blue") 
+
+```
+]
+
+---
+class: hide_logo
+background-image: url("images/list_2.png")
+background-position: 5% 60%
+background-size: 15%
+
+## Sampling strategies: *simple* random sampling 
+
+.center[
+```{r survey_1d, echo=FALSE}
+set.seed(1234)
+
+qtm(PROV, fill = "prov_code") + tm_layout(legend.show = FALSE, frame = FALSE) + 
+qtm(S1, symbols.size = 0.5, symbols.col = "blue") +
+qtm(S2, symbols.size = 0.5, symbols.col = "blue") +
+qtm(S3, symbols.size = 0.5, symbols.col = "blue") +
+qtm(S4, symbols.size = 0.5, symbols.col = "blue") +
+qtm(S5, symbols.size = 0.5, symbols.col = "blue") +
+qtm(S6, symbols.size = 0.5, symbols.col = "blue") +
+qtm(S7, symbols.size = 0.5, symbols.col = "blue") +
+qtm(S8, symbols.size = 0.5, symbols.col = "blue") +
+qtm(S9, symbols.size = 0.5, symbols.col = "blue") +
+  
+qtm(S1s, symbols.size = 0.5, symbols.col = "red") +  
+qtm(S2s, symbols.size = 0.5, symbols.col = "red") +  
+qtm(S3s, symbols.size = 0.5, symbols.col = "red") +  
+qtm(S4s, symbols.size = 0.5, symbols.col = "red") +  
+qtm(S5s, symbols.size = 0.5, symbols.col = "red") +  
+qtm(S6s, symbols.size = 0.5, symbols.col = "red") +  
+qtm(S7s, symbols.size = 0.5, symbols.col = "red") +  
+qtm(S8s, symbols.size = 0.5, symbols.col = "red") +  
+qtm(S9s, symbols.size = 0.5, symbols.col = "red")  
 
 ```
 ]
@@ -87,7 +227,30 @@ qtm(spsample(as_Spatial(PROV), 100, type = "random"), symbols.size = 0.5, symbol
 ---
 class: hide_logo
 
-## Sampling strategies 
+## Sampling strategies: *simple* random sampling 
+
+<br/> <br/>
+
+.pull-left[
+.content-box-green[
+- **conceptually simple**
+- fits common **statistical assumptions**: *independence*, *same probability of selection* (i.i.d.) 
+- **efficient**
+]
+]
+
+.pull-right[
+.content-box-red[
+- **expensive**
+- very often **unpractical**
+- often **impossible** in large surveys
+]
+]
+
+---
+class: hide_logo
+
+## Sampling strategies: *cluster* (random) sampling 
 
 .center[
 ```{r survey_2a, echo=FALSE}
@@ -98,13 +261,13 @@ qtm(DIST, fill = "dist_code") + tm_layout(legend.show = FALSE, frame = FALSE) + 
 
 ???
 more efficient (in a practical sense, not statistical)
-We consider the 53 distrcits in SA
+We consider the 52 districts in SA
 and we select some of them, say 18
 
 ---
 class: hide_logo
 
-## Sampling strategies 
+## Sampling strategies: *cluster* (random) sampling  
 
 .center[
 ```{r survey_2b, echo=FALSE}
@@ -121,13 +284,12 @@ qtm(DIST, fill = "SELECTED") + tm_layout(legend.show = FALSE, frame = FALSE) + t
 ]
 
 ???
-OK if we are interested in estimates for the whole country only.
-But not if we want lower levele stimates (e.g. at provincial level)
+
 
 ---
 class: hide_logo
 
-## Sampling strategies 
+## Sampling strategies: *cluster* (random) sampling  
  
 .center[
 ```{r survey_2c, echo=FALSE}
@@ -135,10 +297,33 @@ qtm(DIST, fill = "SELECTED") + qtm(POINTS, symbols.size = 0.5, symbols.col = "re
 
 ```
 ]
+
+---
+class: hide_logo
+
+## Sampling strategies: *cluster* (random) sampling 
+
+<br/> <br/>
+
+.pull-left[
+.content-box-green[
+- **less expensive** than SRS
+- the **only possibility** for some study designs (e.g. some trials to test population interventions where no blinding is possible)
+]
+]
+
+.pull-right[
+.content-box-red[
+- **reduced statistical power** (i.e. it requires larger samples for the same precision/power, compared to SRS)
+- the observations are **not independent**
+]
+]
+
 ---
 class: hide_logo
  
-## Sampling strategies 
+## Sampling strategies: *stratified* (cluster random) sampling  
+
 .center[
 ```{r survey_2d, echo=FALSE}
 qtm(PROV, fill = "prov_code") + qtm(POINTS, symbols.size = 0.5, symbols.col = "red") + tm_layout(legend.show = FALSE, frame = FALSE) 
@@ -146,18 +331,21 @@ qtm(PROV, fill = "prov_code") + qtm(POINTS, symbols.size = 0.5, symbols.col = "r
 ]
 
 ???
+OK if we are interested in estimates for the whole country only.
+But not if we want lower level estimates (e.g. at provincial level: some province have too small samples...)
+
 Stratified sampling: we repeat the process separately for each stratum (== province))
-E.g. 2 district per province, and 6 individuals per district
+E.g. 2 district per province, and 6 individuals per district. we ensure representation at lower level...
 
 ---
 class: hide_logo
  
-## Sampling strategies 
+## Sampling strategies: *stratified* (cluster random) sampling   
 
 .center[
 ```{r survey_3a, echo=FALSE}
-set.seed(1234)
 
+set.seed(1234)
 SELECTED_DIST <- NULL
 DIST1 <- subset(DIST, !dist_code %in% c("CBDC2", "CBDC3", "CBDC4", "CBDC8"))
 
@@ -187,7 +375,7 @@ Better, but....
 ---
 class: hide_logo
  
-## Sampling strategies 
+## Sampling strategies: *stratified* (cluster random) sampling   
 
 .center[
 ```{r survey_3b, echo=FALSE}
@@ -209,124 +397,129 @@ qtm(DIST, fill = "SELECTED") +  qtm(PROV, fill = NULL, borders = "red") +
                                 qtm(POINTS[[15]], symbols.size = 0.5, symbols.col = "red") +
                                 qtm(POINTS[[16]], symbols.size = 0.5, symbols.col = "red") +
                                 qtm(POINTS[[17]], symbols.size = 0.5, symbols.col = "red") +
-                                qtm(POINTS[[17]], symbols.size = 0.5, symbols.col = "red") + 
+                                qtm(POINTS[[18]], symbols.size = 0.5, symbols.col = "red") + 
                                 tm_layout(legend.show = FALSE, frame = FALSE) + tmap_options(max.categories = 53)
 ```
 ]
 
 ???
+
+---
+class: hide_logo
+
+## Sampling strategies: *stratified* (random random) sampling 
+
+.center[
+
+  ```{r survey_3c, echo=FALSE}
+  
+  qtm(PROV, fill = "prov_code") + 
+    qtm(POINTS[[1]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[2]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[3]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[4]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[5]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[6]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[7]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[8]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[9]], symbols.size = 0.5, symbols.col = "red") + 
+    qtm(POINTS[[10]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[11]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[12]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[13]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[14]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[15]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[16]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[17]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[18]], symbols.size = 0.5, symbols.col = "red") + 
+    tm_layout(legend.show = FALSE, frame = FALSE)  + tmap_options(max.categories = 53)  
+  ```
+]
+
+???
+  Disproportionate sampling 
+PPS (probability proportional to size and self-weighting)
+
+---
+class: hide_logo
+
+## Sampling strategies: *stratified* (cluster random) sampling 
+
+<br/> <br/>
+
+.pull-left[
+.content-box-green[
+- increased **statistical power** (i.e. it requires smaller samples for the same precision/power, compared to clustering alone)
+- ensure adequate power/precision for **sub-populations**
+]
+]
+
+.pull-right[
+.content-box-red[
+- **more expensive** than cluster sampling 
+- in general the **probability of section of individuals are not equal**
+]
+]
+
+---
+class: hide_logo
+background-image: url("images/list_3.png")
+background-position: 5% 60%
+background-size: 15%
+
+## Unequal probability of selection 
+
+.center[
+
+  ```{r survey_3d, echo=FALSE}
+  
+  qtm(PROV, fill = "prov_code") + 
+    qtm(POINTS[[1]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[2]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[3]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[4]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[5]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[6]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[7]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[8]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[9]], symbols.size = 0.5, symbols.col = "red") + 
+    qtm(POINTS[[10]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[11]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[12]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[13]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[14]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[15]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[16]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[17]], symbols.size = 0.5, symbols.col = "red") +
+    qtm(POINTS[[18]], symbols.size = 0.5, symbols.col = "red") + 
+    tm_layout(legend.show = FALSE, frame = FALSE)  + tmap_options(max.categories = 53)  
+  ```
+]
+
+???
 small provinces and large provinces have the same number of individuals....
 
----
-class: hide_logo
- 
-## Sampling strategies 
-
-.center[
-```{r survey_3c, echo=FALSE}
-qtm(PROV, fill = "prov_code") + 
-  qtm(POINTS[[1]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[2]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[3]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[4]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[5]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[6]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[7]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[8]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[9]], symbols.size = 0.5, symbols.col = "red") + 
-  qtm(POINTS[[10]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[11]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[12]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[13]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[14]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[15]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[16]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[17]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[17]], symbols.size = 0.5, symbols.col = "red") + 
-  tm_layout(legend.show = FALSE, frame = FALSE)  + tmap_options(max.categories = 53)  
-```
-]
-
-???
-Disproportionate sampling 
-Comment on self-weightinhg
+Solution: Disproportionate sampling (common)
+PPS (probability proportional to size and self-weighting)
 
 ---
 class: hide_logo
- 
-## Sampling strategies 
-  
-.center[
-```{r survey_3d, echo=FALSE}
+background-image: url("images/notiid.png")
+background-position: 50% 20%
+background-size: 40%
 
-set.seed(1234)
+## Survey data:  
 
-POINTS <- rep(list(NA),18)
-SSIZE <- c(6,6,6,18,6,6,6,6,6,6,6,6,6,18,18,6,6,18)
+--
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
 
-for (i in c(1:18)) {
-  dis <- unique(CDIST$dist_code)[i]
-  D <- subset(CDIST, dist_code == dis)
-  POINTS[[i]] <- spsample(as_Spatial(D), SSIZE[i], type = "random")
-}
+.content-box-red[.Large[Clustering]] --> .content-box-red[.Large[non-independence]]
+<br/>
+.content-box-yellow[.Large[Stratification]] --> .content-box-yellow[.Large[unequal probability of selection]] 
 
-qtm(PROV, fill = "prov_code") + 
-  qtm(POINTS[[1]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[2]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[3]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[4]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[5]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[6]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[7]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[8]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[9]], symbols.size = 0.5, symbols.col = "red") + 
-  qtm(POINTS[[10]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[11]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[12]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[13]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[14]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[15]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[16]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[17]], symbols.size = 0.5, symbols.col = "red") +
-  qtm(POINTS[[17]], symbols.size = 0.5, symbols.col = "red") + 
-  tm_layout(legend.show = FALSE, frame = FALSE) + tmap_options(max.categories = 53)  
-```
-]
-
----
-class: hide_logo
-background-image: url("images/enumeration.png")
-background-position: 50% 50%
-background-size: 50%
-
-## In reality... 
 
 ???
-Statistics South Africa enumeration areas (Free State)
-
----
-class: hide_logo, middle, center
-
-
-.pull-left[
-# .content-box-yellow[Unequal sampling] 
-
-]
-
-.pull-right[
-# .content-box-red[Clustering]  
-]
-
-.pull-left[
-# .content-box-yellow[Stratification]  
-]
-
-.pull-right[
-# .content-box-green[Finite population] 
-]
-
-???
-Characteristics that differentiate complex sampling strategies used in surveys from simple random sampling.
+In an extreme synthesis, form a statistical point of view what differentiates complex sampling strategies used in surveys from simple random sampling is the fact that, in general, the observation you get with CRS are **not iid**.
 
 ---
 class: hide_logo, center, middle 
@@ -347,77 +540,147 @@ class: hide_logo, middle
 ]
  
 ???
+Statistics commonly deals with random samples. A random sample can be thought of as a set of objects that are chosen randomly. More formally, it is "a sequence of independent, identically distributed (IID) random data points".
+
+In other words, the terms random sample and IID are one and the same. In statistics, "random sample" is the typical terminology, but in probability, it is more common to say "IID".
+
+Identically distributed means that there are no overall trends—the distribution does not fluctuate and all items in the sample are taken from the same probability distribution.
+Independent means that the sample items are all independent events. In other words, they are not connected to each other in any way;[2] knowledge of the value of one variable gives no information about the value of the other and vice versa.
+
 Ignoring the sampling strategy in the (i.e. assuming that it was simple random sampling) introduces bias in the estimates and incorrect quantification of sampling error
 
 ---
 class: hide_logo, middle, center
 
-# .content-box-yellow[Unequal sampling, stratification] 
+# .content-box-yellow[Stratification] 
 
 ---
 class: hide_logo
-# An example Dataset
 
-```{r survey_4a, echo=TRUE}
-summary(DATA[, c(1:3,5,7)])
+## An example Dataset
+
+```{r survey_4a, echo=FALSE}
+
+DATA[DATA$geo1 == "KZN",]$globorisk_nonlab <- DATA[DATA$geo1 == "KZN",]$globorisk_nonlab*3     # EXAGGERATING KZN RISK
+df <- merge(data.frame(table(DATA$geo1)), POP2016, by.x = "Var1", by.y = "geo1") %>% rename(geo1 = Var1)
+sweight <- df$pop/df$Freq
+sweight <- sweight/sum(sweight)
+WEIGHTS <- data.frame(sweight = sweight, geo1 = df$geo1)
+DATA1 <- merge(DATA,WEIGHTS)
+
+TRUEAVRISK <- weighted.mean(DATA1$globorisk_nonlab,DATA1$sweight,na.rm = TRUE)    # HYPOTHETICAL 'TRUE' POPULATION RISK
+TRUEAVRISK <- 19.5  #ADAPT FOR TEACHING PURPOSES
+
 ```
 
+```{r survey_4b, echo=TRUE}
+nrow(DATA) 
+summary(DATA[, c(1:3,5,7)])
+```
+<br/>
+
+# .content-box-yellow[TRUE POPULATION RISK: `r TRUEAVRISK`%]
 
 ???
 South African population 40-74 years
 Estimated 10 years cardiovascular risk
-Example dataset, modified for teaching purposes...
+Example dataset, modified for teaching purposes... (KZN has higher risk, but not so much higher)
 
 ---
 class: hide_logo
 
-```{r survey_4b, echo=TRUE}
-mean(DATA$globorisk_nonlab) 
-aggregate(DATA$globorisk_nonlab, by = list(DATA$geo1), FUN = mean)
+## Estimation average **population** risk 
+
+--
+
+```{r survey_4c, echo=TRUE}
+round(mean(DATA$globorisk_nonlab),1)
 ```
 
+.pull-left[
+.content-box-yellow[ESTIMATE: `r round(mean(DATA$globorisk_nonlab),1)`%]
+]
+.pull-right[
+.content-box-yellow[TRUE VALUE: `r TRUEAVRISK`%]
+]
+
+--
+<br/><br/>
+.center[
+# .content-box-yellow[WHAT HAPPENED?]
+]
 
 ???
 Estimating average cardiovascular risk
+sample mean is unbiased estimate of population mean in case of SRS
 
 ---
 class: hide_logo
 
-```{r survey_4c, echo=TRUE}
-
-cbind(data.frame(table(DATA$geo1)), POP2016)
-
+.pull-left[
+```{r survey_4d1, echo=TRUE}
+aggregate(DATA$globorisk_nonlab, by = list(DATA$geo1), FUN = mean) 
 ```
- 
+]
+
+.pull-right[
+```{r survey_4d2, echo=TRUE}
+
+df <- merge(data.frame(table(DATA$geo1)), POP2016, by.x = "Var1", by.y = "geo1") %>% rename(geo1 = Var1)
+df
+```
+]
+
 ---
 class: hide_logo
-.small[
-```{r survey_4d, echo=TRUE}
 
-psamp <- table(DATA$geo1)/POP2016$pop  
+.small[
+```{r survey_4e, echo=TRUE}
+
+psamp <- df$Freq/df$pop  
 psamp
+
 sweight <- 1/psamp 
 sweight
+
 sweight <- sweight/sum(sweight)
 sweight 
 
 ```
  ]
+
 ---
 class: hide_logo
 
-```{r survey_4e, echo=TRUE}
+```{r survey_4f, echo=TRUE}
 
-aest <- aggregate(DATA$globorisk_nonlab, by = list(DATA$geo1), FUN = mean)$x # BREAK
-west <- aest %*% sweight 
-west
+WEIGHTS <- data.frame(sweight = sweight, geo1 = df$geo1)
+DATA <- merge(DATA,WEIGHTS)
 
-mean(DATA$globorisk_nonlab) 
+head(DATA[, c(1:7,12)])
+
+```
+
+--
+
+```{r survey_4g, echo=TRUE}
+
+weighted.mean(DATA1$globorisk_nonlab,DATA1$sweight,na.rm = TRUE)
 
 ```
  
+---
+class: hide_logo
+
+
+```{r survey_4h, echo=TRUE}
+
+aest <- aggregate(DATA[,c("globorisk_nonlab","sweight")], by = list(DATA$geo1), FUN = mean, data = DATA, na.rm = TRUE) 
+aest
+
+```
+
 ???
-bias!
 
 ---
 class: hide_logo, center, middle 
@@ -437,14 +700,9 @@ Similar effects happens when the estimates of interest are not simple descriptiv
 class: hide_logo
   
 ```{r survey_5b, echo=TRUE}
-WEIGHTS <- data.frame(sweight)
-colnames(WEIGHTS) <- c("geo1","sweight")
-DATA <- merge(DATA, WEIGHTS)
-
 glm(globorisk_nonlab ~ age, family = gaussian(link = "identity"), 
     weights = DATA$sweight, data = DATA)
 ```
-
 
 ---
 class: hide_logo, middle, center
@@ -475,7 +733,7 @@ background-size: 80%
 
 ???
 simple random sample
-increasing sample size we increase the 'information' we have on teh population
+increasing sample size we increase the 'information' we have on the population
 
 ---
 class: hide_logo
@@ -485,7 +743,7 @@ background-size: 80%
 
 ???
 simple random sample
-increasing sample size we don't increase the 'information' we have on the population (new element very similar to teh previous do not add any information...in this extreme case they are useless...)
+increasing sample size we don't increase the 'information' we have on the population (new element very similar to the previous do not add any information...in this extreme case they are useless...)
 
 ---
 class: hide_logo
@@ -543,8 +801,6 @@ NEFF1 <- round(SSIZE/DEFF1,0)
 rho2 <- ICC(y = KZN$risk, cl = KZN$geo2)$ICC
 DEFF2 <- 1 + (as.integer(m) - 1) * rho2
 NEFF2 <- round(SSIZE/DEFF2,0)
-
-
 
 ```
 
@@ -604,21 +860,11 @@ class: hide_logo
 # Conditional Models
 
 <br/><br/><br/>
-$$
-\operatorname{globorisk} = \alpha + \epsilon
-$$
 
 $$
 \operatorname{globorisk} = \alpha + \beta_{1}(\operatorname{age}) + \epsilon
 $$
 
-$$
-\begin{aligned}
-  \operatorname{globorisk}_{i}  &\sim N \left(\alpha_{j[i]}, \sigma^2 \right) \\
-    \alpha_{j}  &\sim N \left(\mu_{\alpha_{j}}, \sigma^2_{\alpha_{j}} \right)
-    \text{, for geo1 j = 1,} \dots \text{,J}
-\end{aligned}
-$$
 
 $$
 \begin{aligned}
@@ -627,29 +873,6 @@ $$
     \text{, for geo1 j = 1,} \dots \text{,J}
 \end{aligned}
 $$
-
----
-class: hide_logo
-
-.small[
-.pull-left[
-```{r survey_7a1, echo=TRUE}
-nm <- lm(globorisk_nonlab ~ 1, 
-            data = DATA)
-summary(nm)$coefficients
-```
-]
-
-.pull-right[
-```{r survey_7a2, echo=TRUE}
-library(lme4)
-cm <- lmer(globorisk_nonlab ~ (1 | geo1), 
-             data = DATA)
-summary(cm)
-```
-]
-]
-
 ---
 class: hide_logo
 
@@ -677,13 +900,18 @@ summary(cm)
 class: hide_logo
 
 # Marginal Models
-<br/><br/><br/><br/><
+<br/><br/><br/><br/>
 $$
 \begin{aligned}
 \mu_i = \beta_{0} + \beta_{1}(\operatorname{age_i}) \\
-\sum_{i=1}^{N}{\frac{\partial \mu_i}{\partial \beta}V_i^{-1}\{Y_i-\mu_i(\beta)\}}
+Var(globorisk_{nonlab}) = \Sigma
 \end{aligned}
 $$
+
+???
+
+Sigma = nuisance parameter of assumed structure
+
 ---
 class: hide_logo
 
@@ -699,6 +927,9 @@ summary(nm)$coefficients
 .pull-right[
 ```{r survey_7d2, echo=TRUE}
 library(gee)
+DATA <- DATA[order(DATA$geo1),]
+
+
 mm <- gee(globorisk_nonlab ~ age + 1 , 
           id = geo1, 
           data = DATA,  
@@ -808,7 +1039,7 @@ class: hide_logo
 class: hide_logo
 background-image: url("images/reading.png")
 background-position: 90% 90%
-background-size: 20%
+background-size: 40%
 ## References  
 `r NoCite(bib, c("lumley2011"))`
 
@@ -825,7 +1056,7 @@ class: su-white
 
 .font200[
 <p style ="font-size:200%; margin-bottom: -10px; margin-left: -5px;">Thank You!</p>
-[ acois@sun.ac.za](mailto:acois@sun.ac.za)
+[annibale.cois@mrc.ac.za](mailto:annibale.cois@mrc.ac.za)
 ]
 <br/><br/>
 
@@ -836,4 +1067,5 @@ The rmarkdown code of this presentation is available on GitHub: <br/>
 <a href = "https://github.com/AnnibaleCois/SurveyData">https://github.com/AnnibaleCois/SurveyData</a> 
 
 </div>
+
 

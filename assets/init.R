@@ -24,7 +24,7 @@ library(hexbin, quietly = TRUE)
 library(fBasics, quietly = TRUE)
 
 library(raster, quietly = TRUE)
-library(rgeos, quietly = TRUE)
+#library(rgeos, quietly = TRUE)
 library(tmap, quietly = TRUE)
 library(ggmap, quietly = TRUE)
 library(sf, quietly = TRUE)
@@ -66,14 +66,14 @@ top_icon = function(x) {
   icons::icon_style(
     icons::fontawesome(x),
     position = "fixed", top = 38, right = 50,
-    fill = "#561a34"  
+    fill = "#007db6"  
   )
 }
 
 # XaringanExtra functions 
 use_xaringan_extra(c("editable", "tile_view", "scribble"))
 use_logo(
-  image_url = "assets/sulogo_1.png",
+  image_url = "assets/mrclogo_1.png",
   width = "150px",
   height = "46px",
   position = xaringanExtra::css_position(bottom = "1em", left = "60px"),
