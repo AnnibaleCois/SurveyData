@@ -1,7 +1,7 @@
 ---
 title: "Survey data and weighted regression"
 subtitle: "Annibale Cois"
-author: "<span style='font-size: 80%;'>Burden of Disease Research Unit, South African Medical Research Council &amp; <br/> School of Public Health, University of Cape Town<br/><br/>Contacts: acois@sun.ac.za<br/>ORCID: [0000-0002-7014-6510](https://orcid.org/0000-0002-7014-6510)<br/>Web of Science: [ AAK-8603-2020](https://www.webofscience.com/wos/author/rid/AAK-8603-2020)</span>" 
+author: "<span style='font-size: 80%;'>Burden of Disease Research Unit, South African Medical Research Council &amp; <br/> School of Public Health, University of Cape Town<br/><br/>Contacts: acois@mrc.ac.za<br/>ORCID: [0000-0002-7014-6510](https://orcid.org/0000-0002-7014-6510)<br/>Web of Science: [ AAK-8603-2020](https://www.webofscience.com/wos/author/rid/AAK-8603-2020)</span>" 
 date: "<span style = 'color: #A88B53; position: relative; top: 90px;'>9 May 2024</span>" 
 output:  
   xaringan::moon_reader:
