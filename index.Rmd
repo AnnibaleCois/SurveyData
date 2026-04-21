@@ -1,8 +1,8 @@
 ---
 title: "Survey data and weighted regression"
 subtitle: "Annibale Cois"
-author: "<span style='font-size: 80%;'>Burden of Disease Research Unit, South African Medical Research Council &amp; <br/> School of Public Health, University of Cape Town<br/><br/>Contacts: acois@mrc.ac.za<br/>ORCID: [0000-0002-7014-6510](https://orcid.org/0000-0002-7014-6510)<br/>Web of Science: [ AAK-8603-2020](https://www.webofscience.com/wos/author/rid/AAK-8603-2020)</span>" 
-date: "<span style = 'color: #A88B53; position: relative; top: 90px;'>9 May 2024</span>" 
+author: "<span style='font-size: 80%;'>Burden of Disease Research Unit, South African Medical Research Council &amp; <br/> School of Public Health, University of Cape Town<br/><br/>Contacts: annibale.cois@mrc.ac.za<br/>ORCID: [0000-0002-7014-6510](https://orcid.org/0000-0002-7014-6510)<br/>Web of Science: [ AAK-8603-2020](https://www.webofscience.com/wos/author/rid/AAK-8603-2020)</span>" 
+date: "<span style = 'color: #A88B53; position: relative; top: 90px;'>21 April 2026</span>" 
 output:  
   xaringan::moon_reader:
     css: ["default", "assets/sydney-fonts.css", "assets/sydney.css", "assets/mrc.css"]
@@ -322,7 +322,7 @@ class: hide_logo
 ---
 class: hide_logo
  
-## Sampling strategies: *stratified* (cluster random) sampling  
+## Sampling strategies: *stratified* (random) sampling  
 
 .center[
 ```{r survey_2d, echo=FALSE}
@@ -340,7 +340,7 @@ E.g. 2 district per province, and 6 individuals per district. we ensure represen
 ---
 class: hide_logo
  
-## Sampling strategies: *stratified* (cluster random) sampling   
+## Sampling strategies: *stratified* (*cluster* random) sampling   
 
 .center[
 ```{r survey_3a, echo=FALSE}
@@ -375,7 +375,7 @@ Better, but....
 ---
 class: hide_logo
  
-## Sampling strategies: *stratified* (cluster random) sampling   
+## Sampling strategies: *stratified* (*cluster* random) sampling   
 
 .center[
 ```{r survey_3b, echo=FALSE}
@@ -407,7 +407,7 @@ qtm(DIST, fill = "SELECTED") +  qtm(PROV, fill = NULL, borders = "red") +
 ---
 class: hide_logo
 
-## Sampling strategies: *stratified* (random random) sampling 
+## Sampling strategies: *stratified* (*cluster* random) sampling 
 
 .center[
 
@@ -505,21 +505,14 @@ PPS (probability proportional to size and self-weighting)
 ---
 class: hide_logo
 background-image: url("images/notiid.png")
-background-position: 50% 20%
-background-size: 40%
+background-position: 50% 50%
+background-size: 50%
 
 ## Survey data:  
 
---
-<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-
-.content-box-red[.Large[Clustering]] --> .content-box-red[.Large[non-independence]]
-<br/>
-.content-box-yellow[.Large[Stratification]] --> .content-box-yellow[.Large[unequal probability of selection]] 
-
-
 ???
 In an extreme synthesis, form a statistical point of view what differentiates complex sampling strategies used in surveys from simple random sampling is the fact that, in general, the observation you get with CRS are **not iid**.
+(the probability of selection is not the same for all elements in teh sample, and does depends on oterh factors)
 
 ---
 class: hide_logo, center, middle 
@@ -561,15 +554,17 @@ class: hide_logo
 
 ```{r survey_4a, echo=FALSE}
 
-DATA[DATA$geo1 == "KZN",]$globorisk_nonlab <- DATA[DATA$geo1 == "KZN",]$globorisk_nonlab*3     # EXAGGERATING KZN RISK
+DATA[DATA$geo1 == "GT",]$globorisk_nonlab <- DATA[DATA$geo1 == "GT",]$globorisk_nonlab*3    # EXAGGERATING GT RISK FOR CLARITY
+DATA[DATA$globorisk_nonlab > 100,]$globorisk_nonlab <- 98
+
 df <- merge(data.frame(table(DATA$geo1)), POP2016, by.x = "Var1", by.y = "geo1") %>% rename(geo1 = Var1)
 sweight <- df$pop/df$Freq
 sweight <- sweight/sum(sweight)
 WEIGHTS <- data.frame(sweight = sweight, geo1 = df$geo1)
 DATA1 <- merge(DATA,WEIGHTS)
 
-TRUEAVRISK <- weighted.mean(DATA1$globorisk_nonlab,DATA1$sweight,na.rm = TRUE)    # HYPOTHETICAL 'TRUE' POPULATION RISK
-TRUEAVRISK <- 19.5  #ADAPT FOR TEACHING PURPOSES
+TRUEAVRISK <- round(weighted.mean(DATA1$globorisk_nonlab,DATA1$sweight,na.rm = FALSE),1)    # HYPOTHETICAL 'TRUE' POPULATION RISK
+#TRUEAVRISK <- 19.5  #ADAPT FOR TEACHING PURPOSES
 
 ```
 
@@ -626,8 +621,9 @@ aggregate(DATA$globorisk_nonlab, by = list(DATA$geo1), FUN = mean)
 .pull-right[
 ```{r survey_4d2, echo=TRUE}
 
-df <- merge(data.frame(table(DATA$geo1)), POP2016, by.x = "Var1", by.y = "geo1") %>% rename(geo1 = Var1)
-df
+df <- merge(data.frame(round(prop.table(table(DATA$geo1))*100,1)), POP2016, by.x = "Var1", by.y = "geo1") %>% rename(geo1 = Var1)
+df$Pop_perc <- round(df$pop/sum(df$pop)*100,1)
+df 
 ```
 ]
 
@@ -637,13 +633,13 @@ class: hide_logo
 .small[
 ```{r survey_4e, echo=TRUE}
 
-psamp <- df$Freq/df$pop  
+psamp <- df$Freq/df$pop %>% set_names(c("EC","FS","GT","KZN","LI","MP","NC","NW","WC"))
 psamp
 
-sweight <- 1/psamp 
+sweight <- 1/psamp %>% set_names(c("EC","FS","GT","KZN","LI","MP","NC","NW","WC"))
 sweight
 
-sweight <- sweight/sum(sweight)
+sweight <- (sweight/sum(sweight)) %>% set_names(c("EC","FS","GT","KZN","LI","MP","NC","NW","WC"))
 sweight 
 
 ```
@@ -870,7 +866,7 @@ $$
 \begin{aligned}
   \operatorname{globorisk}_{i}  &\sim N \left(\alpha_{j[i]} + \beta_{1}(\operatorname{age}), \sigma^2 \right) \\
     \alpha_{j}  &\sim N \left(\mu_{\alpha_{j}}, \sigma^2_{\alpha_{j}} \right)
-    \text{, for geo1 j = 1,} \dots \text{,J}
+    \text{, for geo2 j = 1,} \dots \text{,J}
 \end{aligned}
 $$
 ---
@@ -880,7 +876,7 @@ class: hide_logo
 .pull-left[
 ```{r survey_7b1, echo=TRUE}
 nm <- lm(globorisk_nonlab ~ age + 1 , 
-            data = DATA)
+         data = DATA)
 summary(nm)$coefficients
 ```
 ]
@@ -889,7 +885,7 @@ summary(nm)$coefficients
 ```{r survey_7b2, echo=TRUE}
 library(lme4)
 cm <- lmer(
-       globorisk_nonlab ~ age + (1 | geo1), 
+       globorisk_nonlab ~ age + (1 | geo2), 
        data = DATA)
 summary(cm)
 ```
@@ -927,11 +923,10 @@ summary(nm)$coefficients
 .pull-right[
 ```{r survey_7d2, echo=TRUE}
 library(gee)
-DATA <- DATA[order(DATA$geo1),]
-
+DATA <- DATA[order(DATA$geo2),]
 
 mm <- gee(globorisk_nonlab ~ age + 1 , 
-          id = geo1, 
+          id = geo2, 
           data = DATA,  
           corstr = "exchangeable")
 t(summary(mm)$coefficients)
